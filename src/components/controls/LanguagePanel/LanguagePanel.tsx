@@ -2,6 +2,7 @@ import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { cn } from '@bem-react/classname';
 
 import { getLanguageNameByCode, getMessage } from '../../../lib/language';
+import { formatLanguageLabel } from '../../../lib/languageFlag';
 import { addRecentUsedLanguage } from '../../../requests/backend/recentUsedLanguages/addRecentUsedLanguage';
 import { getRecentUsedLanguages } from '../../../requests/backend/recentUsedLanguages/getRecentUsedLanguages';
 import { Button } from '../../primitives/Button/Button.bundle/desktop';
@@ -23,6 +24,10 @@ export interface LanguagePanelProps {
 	disableSwap?: boolean;
 	preventFocusOnPress?: boolean;
 	mobile?: boolean;
+	/** Prefix language names with representative flag emojis */
+	showFlags?: boolean;
+	/** Denser layout for compact surfaces (e.g. selection popup) */
+	view?: 'wide' | 'compact';
 }
 
 export const LanguagePanel: FC<LanguagePanelProps> = ({
@@ -36,9 +41,13 @@ export const LanguagePanel: FC<LanguagePanelProps> = ({
 	disableSwap,
 	preventFocusOnPress,
 	mobile,
+	showFlags = false,
+	view,
 }) => {
 	const fromValue = from !== undefined ? from : auto ? 'auto' : languages[0];
 	const toValue = to !== undefined ? to : languages[0];
+
+	const panelView = view ?? (mobile ? 'wide' : undefined);
 
 	const swapLanguages = () => {
 		if (fromValue === 'auto') return;
@@ -67,12 +76,20 @@ export const LanguagePanel: FC<LanguagePanelProps> = ({
 		[],
 	);
 
+	const formatLabel = useCallback(
+		(langCode: string) => {
+			const name = getLanguageNameByCode(langCode);
+			return showFlags ? formatLanguageLabel(langCode, name) : name;
+		},
+		[showFlags],
+	);
+
 	const options = useMemo(
 		() =>
 			languages
 				.map((value) => ({
 					id: value,
-					content: getLanguageNameByCode(value),
+					content: formatLabel(value),
 				}))
 				.sort((language1, language2) => {
 					// The lowest the most used
@@ -87,26 +104,22 @@ export const LanguagePanel: FC<LanguagePanelProps> = ({
 						return lang1UsageRate > lang2UsageRate ? -1 : 1;
 					}
 
-					// Sort lexicographically
-					return language1.content > language2.content
-						? 1
-						: language1.content < language2.content
-							? -1
-							: 0;
+					// Sort lexicographically by bare language name (stable without flags)
+					const name1 = getLanguageNameByCode(language1.id);
+					const name2 = getLanguageNameByCode(language2.id);
+					return name1 > name2 ? 1 : name1 < name2 ? -1 : 0;
 				}),
-		[languages, recentLanguages],
+		[formatLabel, languages, recentLanguages],
 	);
 
 	const optionsFrom = useMemo(
 		() =>
-			auto
-				? [{ id: 'auto', content: getLanguageNameByCode('auto') }, ...options]
-				: options,
-		[auto, options],
+			auto ? [{ id: 'auto', content: formatLabel('auto') }, ...options] : options,
+		[auto, formatLabel, options],
 	);
 
 	return (
-		<span className={cnLanguagePanel({ view: mobile ? 'wide' : undefined })}>
+		<span className={cnLanguagePanel({ view: panelView })}>
 			<Select
 				options={optionsFrom}
 				value={fromValue}

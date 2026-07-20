@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "Mostrar texto original"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "Ocultar texto original"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "Traduzido por $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "Alterar idioma"
 	},

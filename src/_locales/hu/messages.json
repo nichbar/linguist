@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "Eredeti szöveg megjelenítése"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "Eredeti szöveg elrejtése"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "Fordította: $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "Nyelv megváltoztatása"
 	},

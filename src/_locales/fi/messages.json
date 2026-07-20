@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "Näytä alkuperäinen teksti"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "Piilota alkuperäinen teksti"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "Kääntäjä: $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "Vaihda kieltä"
 	},

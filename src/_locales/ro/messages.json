@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "Afișează textul original"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "Ascunde textul original"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "Tradus de $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "Schimbă limba"
 	},

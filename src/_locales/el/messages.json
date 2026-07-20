@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "Εμφάνιση αρχικού κειμένου"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "Απόκρυψη πρωτότυπου κειμένου"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "Μετάφραση από $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "Αλλαγή γλώσσας"
 	},

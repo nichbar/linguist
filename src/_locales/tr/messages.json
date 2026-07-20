@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "Orijinal metni göster"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "Orijinal metni gizle"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "$1 tarafından çevrildi",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "Dili değiştir"
 	},

@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "Visa originaltext"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "Dölj originaltext"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "Översatt av $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "Byt språk"
 	},

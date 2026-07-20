@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "Vis original tekst"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "Skjul originaltekst"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "Oversat af $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "Skift sprog"
 	},

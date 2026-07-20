@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "Показати оригінальний текст"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "Сховати оригінальний текст"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "Перекладено за допомогою $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "Змінити мову"
 	},

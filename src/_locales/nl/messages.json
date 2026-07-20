@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "Originele tekst tonen"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "Oorspronkelijke tekst verbergen"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "Vertaald door $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "Taal wijzigen"
 	},

@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "Mostra el text original"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "Amaga el text original"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "Traduït per $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "Canviar idioma"
 	},

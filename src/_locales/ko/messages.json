@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "원본 텍스트 보기"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "원문 숨기기"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "$1 제공 번역",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "언어 변경"
 	},

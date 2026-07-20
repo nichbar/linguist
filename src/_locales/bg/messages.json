@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "Показване на оригиналния текст"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "Скрий оригиналния текст"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "Преведено от $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "Смяна на езика"
 	},

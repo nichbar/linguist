@@ -7,6 +7,20 @@
 	pointer-events: all;
 }
 
+/*
+ * Card chrome lives on .TextTranslator (tokens for fill/radius/shadow).
+ * Neutralize the default Popup shell so we don't stack two shadows/borders.
+ */
+.TextTranslatorPopup .Popup_view_default {
+	background: transparent;
+	box-shadow: none;
+	border-radius: 0;
+}
+
+.TextTranslatorPopup .Popup_view_default::before {
+	display: none;
+}
+
 /* TranslateButton */
 .TextTranslatorPopup-TranslateButton {
 	display: block;
@@ -26,4 +40,8 @@
 
 .TextTranslatorPopup_mobile .Modal-Content {
 	display: block;
+
+	/* Card provides its own surface; keep Modal content transparent */
+	background: transparent;
+	padding: 0;
 }

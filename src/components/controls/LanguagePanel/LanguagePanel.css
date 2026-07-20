@@ -19,3 +19,24 @@
 	font-size: 1.1em;
 	padding: 0.1em;
 }
+
+/* Compact layout for selection popup */
+.LanguagePanel_view_compact {
+	display: inline-flex;
+	align-items: center;
+	min-width: 0;
+	flex: 1 1 auto;
+}
+
+.LanguagePanel_view_compact > *:not(:first-child) {
+	margin-left: var(--typography-layout-indent-s-all);
+}
+
+.LanguagePanel_view_compact .LanguagePanel-Select {
+	min-width: 0;
+	max-width: 11rem;
+}
+
+.LanguagePanel_view_compact .LanguagePanel-Button {
+	flex-shrink: 0;
+}

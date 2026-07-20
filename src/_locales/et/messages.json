@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "Kuva algne tekst"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "Peida algtekst"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "Tõlkinud $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "Muuda keelt"
 	},

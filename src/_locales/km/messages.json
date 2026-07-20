@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "បង្ហាញអត្ថបទដើម"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "Hide original text"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "Translated by $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "ផ្លាស់ប្តូរភាសា"
 	},

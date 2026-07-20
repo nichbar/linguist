@@ -2,22 +2,20 @@ import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 're
 import browser from 'webextension-polyfill';
 import { cn } from '@bem-react/classname';
 
-import { DictionaryButton } from '../../../../../../components/controls/DictionaryButton/DictionaryButton';
 import { LanguagePanel } from '../../../../../../components/controls/LanguagePanel/LanguagePanel';
 // Components
 import { Button } from '../../../../../../components/primitives/Button/Button.bundle/desktop';
 import { Icon } from '../../../../../../components/primitives/Icon/Icon.bundle/desktop';
 import { Loader } from '../../../../../../components/primitives/Loader/Loader';
 import { isMobileBrowser } from '../../../../../../lib/browser';
-import { useTTS } from '../../../../../../lib/hooks/useTTS';
-import { useTTSLanguages } from '../../../../../../lib/hooks/useTTSLanguages';
 import { detectLanguage, getMessage } from '../../../../../../lib/language';
 import { TranslatorFeatures } from '../../../../../../pages/popup/layout/PopupWindow';
+import { getConfig } from '../../../../../../requests/backend/getConfig';
 import { getTranslatorFeatures } from '../../../../../../requests/backend/getTranslatorFeatures';
 import { getUserLanguagePreferences } from '../../../../../../requests/backend/getUserLanguagePreferences';
 import { addTranslationHistoryEntry } from '../../../../../../requests/backend/history/addTranslationHistoryEntry';
 import { TRANSLATION_ORIGIN } from '../../../../../../requests/backend/history/constants';
-import { ITranslation } from '../../../../../../types/translation/Translation';
+import { getAvailableTranslators } from '../../../../../../requests/backend/translators/getAvailableTranslators';
 
 import './TextTranslator.css';
 
@@ -35,10 +33,10 @@ export interface TextTranslatorComponentProps {
 	 */
 	updatePopup: () => void;
 	pageLanguage?: string;
+	/** Kept for API compatibility; original text is no longer shown in the selection popup */
 	showOriginalText?: boolean;
 }
 
-// TODO: improve layout
 // TODO: rename component and move to element dir
 export const TextTranslator: FC<TextTranslatorComponentProps> = ({
 	pageLanguage,
@@ -49,7 +47,6 @@ export const TextTranslator: FC<TextTranslatorComponentProps> = ({
 	closeHandler,
 	translate,
 	updatePopup,
-	showOriginalText,
 }) => {
 	const [from, setFrom] = useState<string>();
 	const [to, setTo] = useState<string>();
@@ -58,6 +55,7 @@ export const TextTranslator: FC<TextTranslatorComponentProps> = ({
 	const [originalText, setOriginalText] = useState<string>(text);
 	const [translatedText, setTranslatedText] = useState<string | null>(null);
 	const [error, setError] = useState<string | null>(null);
+	const [providerName, setProviderName] = useState<string | null>(null);
 
 	const translateContext = useRef(Symbol('TranslateContext'));
 	const translateText = useCallback(() => {
@@ -121,18 +119,6 @@ export const TextTranslator: FC<TextTranslatorComponentProps> = ({
 		},
 		[translatedText],
 	);
-
-	const dictionaryData: ITranslation | null = useMemo(() => {
-		if (translatedText === null || from === undefined || to === undefined)
-			return null;
-
-		return {
-			from,
-			to,
-			originalText,
-			translatedText,
-		};
-	}, [from, originalText, to, translatedText]);
 
 	// Init
 	const isUnmount = useRef(false);
@@ -256,6 +242,16 @@ export const TextTranslator: FC<TextTranslatorComponentProps> = ({
 			},
 		);
 
+		// Resolve active translator display name for footer attribution
+		Promise.all([getConfig(), getAvailableTranslators()])
+			.then(([config, translators]) => {
+				if (isUnmount.current) return;
+
+				const moduleId = config.translatorModule;
+				setProviderName(translators[moduleId] ?? moduleId);
+			})
+			.catch(console.error);
+
 		return () => {
 			isUnmount.current = true;
 			translateContext.current = Symbol('TranslateContext');
@@ -303,58 +299,27 @@ export const TextTranslator: FC<TextTranslatorComponentProps> = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isInited, originalText]);
 
-	const [activeTTS, setActiveTTS] = useState<symbol | null>(null);
-	const TTSSignal = {
-		active: activeTTS,
-		setActive: setActiveTTS,
-	};
-	const ttsOriginal = useTTS(from ?? null, originalText, TTSSignal);
-	const ttsTranslate = useTTS(to ?? null, translatedText, TTSSignal);
-	const ttsModule = useTTSLanguages();
-
 	const isMobile = useMemo(() => isMobileBrowser(), []);
-
-	const closeButton = (
-		<div
-			className={
-				isMobile
-					? cnTextTranslator('MobileHead')
-					: cnTextTranslator('Container', {
-							direction: 'right',
-						})
-			}
-		>
-			<Button
-				view="clear"
-				// `onPress` is not work in shadow DOM
-				onPress={closeHandler}
-				title={getMessage('common_close')}
-				content="icon"
-			>
-				<Icon glyph="close" />
-			</Button>
-		</div>
-	);
 
 	if (translatorFeatures !== undefined && (translatedText !== null || error !== null)) {
 		return (
-			<div className={cnTextTranslator()}>
-				<div
-					className={cnTextTranslator('Head', { mobile: isMobile }, [
-						cnTextTranslator('Clearfix'),
-					])}
-				>
-					{isMobile && closeButton}
+			<div className={cnTextTranslator({ mobile: isMobile })}>
+				<div className={cnTextTranslator('Head', { mobile: isMobile })}>
+					{isMobile && (
+						<div className={cnTextTranslator('MobileHead')}>
+							<Button
+								view="clear"
+								// `onPress` is not work in shadow DOM
+								onPress={closeHandler}
+								title={getMessage('common_close')}
+								content="icon"
+							>
+								<Icon glyph="close" />
+							</Button>
+						</div>
+					)}
 
-					<div
-						className={
-							!isMobile
-								? cnTextTranslator('Container', {
-										direction: 'left',
-									})
-								: undefined
-						}
-					>
+					<div className={cnTextTranslator('Languages')}>
 						<LanguagePanel
 							languages={translatorFeatures.supportedLanguages}
 							auto={translatorFeatures.isSupportAutodetect}
@@ -365,68 +330,43 @@ export const TextTranslator: FC<TextTranslatorComponentProps> = ({
 							swapHandler={swapHandler}
 							disableSwap={translatedText === null}
 							mobile={isMobile}
+							view={isMobile ? 'wide' : 'compact'}
 						/>
 					</div>
 
-					{!isMobile && closeButton}
+					{!isMobile && (
+						<div className={cnTextTranslator('Close')}>
+							<Button
+								view="clear"
+								// `onPress` is not work in shadow DOM
+								onPress={closeHandler}
+								title={getMessage('common_close')}
+								content="icon"
+							>
+								<Icon glyph="close" />
+							</Button>
+						</div>
+					)}
 				</div>
+
 				{error === null ? (
 					<>
-						<div
-							className={cnTextTranslator('TextContainer', {
-								text: 'translation',
-							})}
-						>
-							<div className={cnTextTranslator('TextControls')}>
-								<Button
-									onPress={ttsTranslate.toggle}
-									view="clear"
-									disabled={
-										to === undefined ||
-										!ttsModule.isSupportedLanguage(to)
-									}
-								>
-									<Icon glyph="volume-up" scalable={false} />
-								</Button>
-								<DictionaryButton translation={dictionaryData} />
-							</div>
+						<div className={cnTextTranslator('Main')}>
 							<div className={cnTextTranslator('Body')}>
 								{translatedText}
 							</div>
 						</div>
-						{!showOriginalText ? undefined : (
-							<div
-								className={cnTextTranslator('TextContainer', {
-									text: 'original',
-								})}
-							>
-								<div className={cnTextTranslator('TextControls')}>
-									<Button
-										onPress={ttsOriginal.toggle}
-										view="clear"
-										disabled={
-											from === undefined ||
-											!ttsModule.isSupportedLanguage(from)
-										}
-									>
-										<Icon glyph="volume-up" scalable={false} />
-									</Button>
-								</div>
-								<div className={cnTextTranslator('Body')}>
-									<details
-										onToggle={updatePopup}
-										className={cnTextTranslator('Details')}
-									>
-										<summary>
-											{getMessage(
-												'inlineTranslator_showOriginalText',
-											)}
-										</summary>
-										<p className={cnTextTranslator('OriginalText')}>
-											{originalText}
-										</p>
-									</details>
-								</div>
+
+						{providerName && (
+							<div className={cnTextTranslator('Footer')}>
+								<span
+									className={cnTextTranslator('Provider')}
+									title={providerName}
+								>
+									{getMessage('inlineTranslator_translatedBy', [
+										providerName,
+									])}
+								</span>
 							</div>
 						)}
 					</>
@@ -435,11 +375,23 @@ export const TextTranslator: FC<TextTranslatorComponentProps> = ({
 						<div className={cnTextTranslator('Body', { error: true })}>
 							{error}
 						</div>
-						<div>
+						<div className={cnTextTranslator('ErrorActions')}>
 							<Button view="action" onPress={translateText}>
 								{getMessage('common_retry')}
 							</Button>
 						</div>
+						{providerName && (
+							<div className={cnTextTranslator('Footer')}>
+								<span
+									className={cnTextTranslator('Provider')}
+									title={providerName}
+								>
+									{getMessage('inlineTranslator_translatedBy', [
+										providerName,
+									])}
+								</span>
+							</div>
+						)}
 					</>
 				)}
 			</div>

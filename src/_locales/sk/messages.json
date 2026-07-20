@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "Zobraziť pôvodný text"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "Skryť pôvodný text"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "Preložené pomocou $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "Zmeniť jazyk"
 	},

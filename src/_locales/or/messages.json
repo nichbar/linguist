@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "ମୂଳ ପାଠ୍ୟ ଦେଖାନ୍ତୁ"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "Hide original text"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "Translated by $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "ଭାଷା ପରିବର୍ତ୍ତନ କରନ୍ତୁ"
 	},

@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "Prikaži izvorni tekst"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "Sakrij izvorni tekst"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "Preveo $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "Promijeni jezik"
 	},

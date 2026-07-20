@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "元のテキストを表示"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "原文を隠す"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "$1 による翻訳",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "言語を変更"
 	},

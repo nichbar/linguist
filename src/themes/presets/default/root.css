@@ -164,4 +164,6 @@
 	--textinput-size-m-hint-font-size: 0.9rem;
 	--textinput-size-m-hint-indent: 0.2rem;
 	--textinput-size-m-clear-indent: 0.2rem;
+	--text-translator-popup-border-radius: 14px;
+	--text-translator-popup-shadow: 0 4px 24px rgb(0 0 0 / 12%);
 }

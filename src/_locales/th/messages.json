@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "แสดงข้อความต้นฉบับ"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "ซ่อนข้อความต้นฉบับ"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "แปลโดย $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "เปลี่ยนภาษา"
 	},

@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "मूल पाठ देखाउनुहोस्"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "Hide original text"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "Translated by $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "भाषा परिवर्तन गर्नुहोस्"
 	},

@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "Prikaži originalni tekst"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "Сакриј оригинални текст"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "Преведено помоћу $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "Promeni jezik"
 	},

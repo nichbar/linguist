@@ -1,23 +1,24 @@
 .TextTranslator {
+	display: flex;
+	flex-direction: column;
+	gap: var(--typography-layout-indent-m-all);
 	width: max-content;
-	max-width: 100%;
+	min-width: 300px;
+	max-width: min(100%, 640px);
 	padding: var(--typography-layout-indent-l-all);
-	border-radius: var(--typography-layout-border-radius);
 	box-sizing: border-box;
 	font-family: var(--typography-font-family);
 	font-size: var(--typography-layout-size-s-font-size);
 	line-height: var(--typography-layout-size-m-line-height);
 	color: var(--color-typo-primary);
-	background: var(--text-translator-popup-fill-color);
-	border: 1px solid var(--color-control-type-blank-border-color-base);
+	background: var(--text-translator-popup-fill-color, #fff);
+	border: 1px solid var(--text-translator-popup-border-color, rgb(0 0 0 / 8%));
+	border-radius: var(--text-translator-popup-border-radius, 14px);
+	box-shadow: var(--text-translator-popup-shadow, 0 4px 24px rgb(0 0 0 / 12%));
 
 	/* Define styles explicit to avoid inherit of page styles. Yes, "reset all" is not work for all */
 	text-align: initial;
 	font-weight: normal;
-}
-
-.TextTranslator > *:not(:first-child) {
-	margin-top: var(--typography-layout-indent-m-all);
 }
 
 /* Button */
@@ -26,91 +27,93 @@
 }
 
 /* Head */
-.TextTranslator-Head:not(.TextTranslator-Head_mobile) > *:not(:first-child) {
-	margin-left: var(--typography-layout-indent-m-all);
-}
-
-/* Container_direction */
-.TextTranslator-Container_direction_left {
-	float: left;
-}
-
-.TextTranslator-Container_direction_right {
-	float: right;
-}
-
-/* Clearfix */
-.TextTranslator-Clearfix::after {
-	display: block;
-	content: '';
-	clear: both;
-}
-
-/* Content */
-.TextTranslator-TextContainer {
+.TextTranslator-Head {
 	display: flex;
-	border-radius: inherit;
+	align-items: center;
+	gap: var(--typography-layout-indent-m-all);
+	min-width: 0;
 }
 
-.TextTranslator-TextContainer::after {
-	display: block;
-	content: '';
-	clear: both;
-}
-
-.TextTranslator-TextControls {
-	--button-size-m-indent-outer: 2px;
-
-	display: flex;
+.TextTranslator-Head_mobile {
 	flex-direction: column;
+	align-items: stretch;
 	gap: var(--typography-layout-indent-s-all);
-	float: left;
-	margin-right: var(--typography-layout-indent-s-all);
 }
 
-.TextTranslator-TextContainer_text_original {
-	background: #eee;
-	width: min-content;
-	min-width: 100%;
-	box-sizing: border-box;
+.TextTranslator-Languages {
+	flex: 1 1 auto;
+	min-width: 0;
 }
 
-.TextTranslator-OriginalText {
-	margin: var(--typography-controls-indent-m);
-	white-space: pre-wrap;
-	max-height: 400px;
-	overflow: auto;
-	scrollbar-width: thin;
+.TextTranslator-Close {
+	flex-shrink: 0;
+	margin-left: auto;
 }
 
-.TextTranslator-Details > summary {
-	margin: 0 5px;
+.TextTranslator-MobileHead {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	width: 100%;
+}
+
+/* Main: translation body */
+.TextTranslator-Main {
+	display: flex;
+	align-items: flex-start;
+	min-width: 0;
 }
 
 /* Body */
 .TextTranslator-Body {
-	width: 100%;
+	flex: 1 1 auto;
+	min-width: 0;
 	max-width: 600px;
 	max-height: 400px;
 	overflow-y: auto;
 	font-size: var(--typography-layout-size-s-font-size);
 	white-space: pre-line;
-	line-height: 1.2rem;
+	line-height: 1.35rem;
 	scrollbar-width: thin;
-	padding-top: 0.3rem;
 }
 
 .TextTranslator-Body_error {
 	color: var(--color-typo-error);
 }
 
+.TextTranslator-ErrorActions {
+	display: flex;
+	justify-content: flex-start;
+}
+
+/* Footer */
+.TextTranslator-Footer {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	flex-wrap: wrap;
+	gap: var(--typography-layout-indent-s-all);
+	min-width: 0;
+	padding-top: var(--typography-layout-indent-xs-all, 0.1rem);
+}
+
+.TextTranslator-Provider {
+	color: var(--color-typo-secondary);
+	font-size: 0.85em;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 100%;
+}
+
 /* Loader */
 .TextTranslator-Loader {
 	padding: 0.25rem;
 	border: 1px solid var(--color-control-type-blank-border-color-base);
-	border-radius: var(--typography-layout-border-radius);
+	border-radius: var(--text-translator-popup-border-radius, 14px);
 	color: var(--color-typo-primary);
 	background: var(--color-container-page-popup-fill-color);
+	box-shadow: var(--text-translator-popup-shadow, 0 4px 24px rgb(0 0 0 / 12%));
 }
 
 .TextTranslator-Loader .Loader-Image {
@@ -118,8 +121,10 @@
 	height: 2rem;
 }
 
-.TextTranslator-MobileHead {
-	margin-bottom: var(--typography-layout-indent-m-all);
+/* Mobile density */
+.TextTranslator_mobile {
 	width: 100%;
-	text-align: right;
+	max-width: 100%;
+	min-width: 0;
+	box-shadow: none;
 }

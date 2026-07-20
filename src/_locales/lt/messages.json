@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "Rodyti originalų tekstą"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "Slėpti originalų tekstą"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "Išvertė $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "Keisti kalbą"
 	},

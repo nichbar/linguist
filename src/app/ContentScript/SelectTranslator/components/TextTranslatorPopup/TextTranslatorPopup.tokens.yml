@@ -1,3 +1,12 @@
+# Tokens for selection TextTranslator popup card chrome.
+# Preferred source of truth also lives in src/themes/tokens/textTranslatorPopup.tokens.yml
+# (Themekit scans themes/tokens and pages/components — not this app/ path unless extended).
 textTranslatorPopup:
   fillColor:
-    value: '#fcfcfc'
+    value: '#ffffff'
+  borderRadius:
+    value: '14px'
+  borderColor:
+    value: 'rgb(0 0 0 / 8%)'
+  shadow:
+    value: '0 4px 24px rgb(0 0 0 / 12%)'

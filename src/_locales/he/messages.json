@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "הצג טקסט מקורי"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "הסתר טקסט מקורי"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "תורגם על ידי $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "שנה שפה"
 	},

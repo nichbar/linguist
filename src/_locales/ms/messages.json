@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "Tunjukkan teks asal"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "Sembunyikan teks asal"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "Diterjemahkan oleh $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "Tukar bahasa"
 	},

@@ -197,4 +197,6 @@
 	--options-page-section-active-border-color: #1f69ff;
 	--options-page-dialog-fill-color: #f5f5f5;
 	--popup-window-header-fill-color: #f1f1f1;
+	--text-translator-popup-fill-color: #fff;
+	--text-translator-popup-border-color: rgb(0 0 0 / 8%);
 }

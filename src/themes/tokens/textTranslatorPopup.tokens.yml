@@ -1,0 +1,9 @@
+textTranslatorPopup:
+  fillColor:
+    value: '#ffffff'
+  borderRadius:
+    value: '14px'
+  borderColor:
+    value: 'rgb(0 0 0 / 8%)'
+  shadow:
+    value: '0 4px 24px rgb(0 0 0 / 12%)'

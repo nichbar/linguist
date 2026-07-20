@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "显示原文"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "隐藏原文"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "由 $1 翻译",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "更改语言"
 	},

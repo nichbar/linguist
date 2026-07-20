@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "Показать оригинальный текст"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "Скрыть исходный текст"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "Переведено с помощью $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "Изменить язык"
 	},

@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "نمایش متن اصلی"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "پنهان کردن متن اصلی"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "ترجمه توسط $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "تغییر زبان"
 	},

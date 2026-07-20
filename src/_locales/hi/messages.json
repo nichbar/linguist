@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "मूल पाठ दिखाएं"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "मूल पाठ छिपाएँ"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "$1 द्वारा अनुवादित",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "भाषा बदलें"
 	},

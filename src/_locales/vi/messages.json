@@ -153,6 +153,18 @@
 	"inlineTranslator_showOriginalText": {
 		"message": "Hiển thị văn bản gốc"
 	},
+	"inlineTranslator_hideOriginalText": {
+		"message": "Ẩn văn bản gốc"
+	},
+	"inlineTranslator_translatedBy": {
+		"message": "Được dịch bởi $1",
+		"placeholders": {
+			"provider": {
+				"content": "$1",
+				"example": "Google"
+			}
+		}
+	},
 	"lang_change": {
 		"message": "Thay đổi ngôn ngữ"
 	},
