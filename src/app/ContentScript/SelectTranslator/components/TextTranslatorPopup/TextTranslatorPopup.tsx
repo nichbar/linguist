@@ -13,13 +13,16 @@ import {
 	TextTranslatorComponentProps,
 } from './TextTranslator/TextTranslator';
 import { fixPosToPreventOverflow } from './TextTranslatorPopup.utils/fixPosToPreventOverflow';
+import { AnchorRect } from './TextTranslatorPopup.utils/getSelectionAnchorRect';
 
 import './TextTranslatorPopup.css';
 
 export interface TextTranslatorPopupProps
 	extends Omit<TextTranslatorComponentProps, 'updatePopup'> {
-	x: number;
-	y: number;
+	/**
+	 * Root-relative selection rect used as the popup anchor
+	 */
+	anchor: AnchorRect;
 	timeoutForHideButton?: number;
 	zIndex?: number;
 	quickTranslate?: boolean;
@@ -35,10 +38,22 @@ export interface TextTranslatorPopupProps
 const cnTheme = cn('Theme');
 const cnTextTranslatorPopup = cn('TextTranslatorPopup');
 
+// Prefer above/below the selection, similar to Google Translate.
+// left/right are last-resort fallbacks when vertical space is tight.
+const SELECTION_POPUP_DIRECTIONS = [
+	'top',
+	'top-start',
+	'top-end',
+	'bottom',
+	'bottom-start',
+	'bottom-end',
+	'right',
+	'left',
+] as const;
+
 // TODO: split styles
 export const TextTranslatorPopup: FC<TextTranslatorPopupProps> = ({
-	x,
-	y,
+	anchor,
 	zIndex,
 	timeoutForHideButton,
 	quickTranslate = false,
@@ -113,18 +128,18 @@ export const TextTranslatorPopup: FC<TextTranslatorPopupProps> = ({
 
 	const cursorRef = useRef<HTMLDivElement>(null);
 	const cursorStyle: React.CSSProperties = useMemo(() => {
-		const { left, top } = fixPosToPreventOverflow(x, y);
+		const { left, top, width, height } = fixPosToPreventOverflow(anchor);
 
 		return {
 			position: 'absolute',
 			left: left + 'px',
 			top: top + 'px',
-			width: '0px',
-			height: '0px',
+			width: Math.max(width, 1) + 'px',
+			height: Math.max(height, 1) + 'px',
 			pointerEvents: 'none',
 			visibility: 'hidden',
 		};
-	}, [x, y]);
+	}, [anchor]);
 
 	const modifiers = useMemo(
 		() => [
@@ -248,19 +263,22 @@ export const TextTranslatorPopup: FC<TextTranslatorPopupProps> = ({
 		);
 	}
 
-	// Render div on the coordinates as cursor and attach popup to it
-	// We use real component instead virtual because require behavior of `position: absolute` instead `fixed`
-	// and implement this logic for virtual component is harder than use real component
+	// Render an invisible rect matching the selection and attach popup to it.
+	// We use a real node (not a virtual element) so positioning behaves like
+	// `position: absolute` rather than `fixed`.
 	return (
 		<>
-			{/* Render cursor */}
+			{/* Selection anchor */}
 			<div style={cursorStyle} ref={cursorRef} />
 
-			{/* Render popup attached to cursor */}
+			{/* Render popup attached to selection */}
 			<div className={cnTextTranslatorPopup({}, [cnTheme(theme)])}>
 				<Popup
 					target="anchor"
 					anchor={cursorRef}
+					// Prefer above, then below the selection (Google Translate style)
+					direction={[...SELECTION_POPUP_DIRECTIONS]}
+					mainOffset={8}
 					visible={true}
 					zIndex={zIndex}
 					modifiers={modifiers}

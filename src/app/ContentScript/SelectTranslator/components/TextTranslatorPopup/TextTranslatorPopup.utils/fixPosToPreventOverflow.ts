@@ -1,47 +1,29 @@
+import { AnchorRect } from './getSelectionAnchorRect';
+
 /**
- * Helper which prevent overflow cursor to viewport
+ * Clamp an anchor rect so it stays within the current page/viewport.
+ * Keeps width/height unchanged; only shifts origin when necessary.
  */
-export const fixPosToPreventOverflow = (left: number, top: number) => {
-	const fixLeft = (left: number) => {
-		const viewportWidth = document.documentElement.clientWidth;
+export const fixPosToPreventOverflow = (rect: AnchorRect): AnchorRect => {
+	const viewportWidth = document.documentElement.clientWidth;
+	const pageHeight = document.documentElement.scrollHeight;
 
-		// Left
-		if (left < 0) {
-			left = 0;
-		}
+	let { left, top } = rect;
+	const { width, height } = rect;
 
-		// Right
-		if (left > viewportWidth) {
-			const extra = left - viewportWidth;
+	// Keep some of the anchor inside the horizontal viewport
+	if (left + width < 0) {
+		left = 0;
+	} else if (left > viewportWidth) {
+		left = Math.max(0, viewportWidth - Math.max(width, 1));
+	}
 
-			// Decrease indent
-			left = left > extra ? left - extra : 0;
-		}
+	// Keep some of the anchor inside the page vertically
+	if (top + height < 0) {
+		top = 0;
+	} else if (top > pageHeight) {
+		top = Math.max(0, pageHeight - Math.max(height, 1));
+	}
 
-		return left;
-	};
-
-	const fixTop = (top: number) => {
-		const pageHeight = document.documentElement.scrollHeight;
-
-		// Top
-		if (top < 0) {
-			top = 0;
-		}
-
-		// Bottom
-		if (top > pageHeight) {
-			const extra = top - pageHeight;
-
-			// Decrease indent
-			top = top > extra ? top - extra : 0;
-		}
-
-		return top;
-	};
-
-	return {
-		left: fixLeft(left),
-		top: fixTop(top),
-	};
+	return { left, top, width, height };
 };

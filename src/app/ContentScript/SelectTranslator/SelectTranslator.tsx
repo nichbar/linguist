@@ -4,6 +4,10 @@ import { ShadowDOMContainerManager } from '../../../lib/ShadowDOMContainerManage
 import { translate } from '../../../requests/backend/translate';
 
 import { TextTranslatorPopup } from './components/TextTranslatorPopup/TextTranslatorPopup';
+import {
+	AnchorRect,
+	getSelectionAnchorRect,
+} from './components/TextTranslatorPopup/TextTranslatorPopup.utils/getSelectionAnchorRect';
 
 export interface Options {
 	/**
@@ -176,17 +180,14 @@ export class SelectTranslator {
 	public translateSelectedText = () => {
 		this.hidePopup();
 
-		const { x, y } = this.lastPointerPosition || {
-			x: window.scrollX,
-			y: window.scrollY,
-		};
-
 		this.getSelectedText().then((selection) => {
 			let text: string | null = null;
+			let selectedSelection: Selection | null = null;
 
 			// TODO: #refactor move this logic to one method `getSelectedText(target?: Node)`
 			if (selection !== null) {
 				text = selection.text;
+				selectedSelection = selection.selection;
 			} else if (
 				this.selectionTarget !== null &&
 				(this.selectionTarget instanceof HTMLTextAreaElement ||
@@ -196,7 +197,13 @@ export class SelectTranslator {
 			}
 
 			if (text !== null) {
-				this.showPopup(text, x, y);
+				this.showPopup(
+					text,
+					this.resolveAnchorRect({
+						selection: selectedSelection,
+						fallbackElement: this.selectionTarget,
+					}),
+				);
 			}
 		});
 	};
@@ -297,10 +304,12 @@ export class SelectTranslator {
 
 		this.getSelectedText().then((selectedTextObj) => {
 			let text: string | null = null;
+			let selectedSelection: Selection | null = null;
 
 			if (selectedTextObj !== null) {
 				// Use selected text on page
 				text = selectedTextObj.text;
+				selectedSelection = selectedTextObj.selection;
 
 				const { selection } = selectedTextObj;
 
@@ -322,12 +331,38 @@ export class SelectTranslator {
 			}
 
 			if (text !== null) {
-				this.showPopup(text, pageX, pageY);
+				this.showPopup(
+					text,
+					this.resolveAnchorRect({
+						selection: selectedSelection,
+						fallbackElement: this.selectionTarget,
+						pointer: { x: pageX, y: pageY },
+					}),
+				);
 			}
 		});
 	};
 
-	private readonly showPopup = (text: string, x: number, y: number) => {
+	/**
+	 * Resolve a page-coordinate rect for the selection popup.
+	 * Prefer selected range bounds (Google Translate style).
+	 */
+	private readonly resolveAnchorRect = ({
+		selection,
+		fallbackElement,
+		pointer = this.lastPointerPosition,
+	}: {
+		selection?: Selection | null;
+		fallbackElement?: HTMLElement | null;
+		pointer?: { x: number; y: number } | null;
+	}): AnchorRect =>
+		getSelectionAnchorRect({
+			selection,
+			fallbackElement,
+			pointer,
+		});
+
+	private readonly showPopup = (text: string, anchorRect: AnchorRect) => {
 		const trimmedText = text.trim();
 
 		if (trimmedText.length === 0) return;
@@ -354,15 +389,14 @@ export class SelectTranslator {
 		const rootNode = this.shadowRoot.getRootNode();
 		if (!rootNode) throw new Error('Root node is not found');
 
-		// Fix x/y position to set position related to root node
-		// Otherwise, in case a root node is shifted (for example when the body is resized),
-		// the element will be rendered too far of requested coordinates,
-		// because element renders related root node
-		// See issue #529
+		// Convert page coords to root-relative coords so positioning stays
+		// correct when the host node is shifted (e.g. body resize). See #529
 		const rootPosition = getAbsolutePositionOfElement(rootNode);
-		const fixedPosition = {
-			x: x - rootPosition.x,
-			y: y - rootPosition.y,
+		const fixedAnchor = {
+			left: anchorRect.left - rootPosition.x,
+			top: anchorRect.top - rootPosition.y,
+			width: anchorRect.width,
+			height: anchorRect.height,
 		};
 
 		this.shadowRoot.mountComponent(
@@ -381,7 +415,7 @@ export class SelectTranslator {
 					focusOnTranslateButton,
 					opacity,
 					text: trimmedText,
-					...fixedPosition,
+					anchor: fixedAnchor,
 				}}
 			/>,
 		);

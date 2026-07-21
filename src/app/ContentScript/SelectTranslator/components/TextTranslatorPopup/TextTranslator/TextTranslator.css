@@ -112,7 +112,7 @@
 	border: 1px solid var(--color-control-type-blank-border-color-base);
 	border-radius: var(--text-translator-popup-border-radius, 14px);
 	color: var(--color-typo-primary);
-	background: var(--color-container-page-popup-fill-color);
+	background: var(--text-translator-popup-fill-color, #fff);
 	box-shadow: var(--text-translator-popup-shadow, 0 4px 24px rgb(0 0 0 / 12%));
 }
 
