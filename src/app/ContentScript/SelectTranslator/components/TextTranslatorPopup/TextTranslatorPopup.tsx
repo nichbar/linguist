@@ -24,6 +24,10 @@ export interface TextTranslatorPopupProps
 	zIndex?: number;
 	quickTranslate?: boolean;
 	focusOnTranslateButton?: boolean;
+	/**
+	 * Opacity of the selection TextTranslator popup card (0–1)
+	 */
+	opacity?: number;
 
 	closeHandler: () => void;
 }
@@ -39,6 +43,7 @@ export const TextTranslatorPopup: FC<TextTranslatorPopupProps> = ({
 	timeoutForHideButton,
 	quickTranslate = false,
 	focusOnTranslateButton = false,
+	opacity = 1,
 	...props
 }) => {
 	const { closeHandler } = props;
@@ -201,7 +206,7 @@ export const TextTranslatorPopup: FC<TextTranslatorPopupProps> = ({
 	const content = (
 		<div tabIndex={0} ref={containerRef}>
 			{translating ? (
-				<TextTranslator {...props} updatePopup={updateHook} />
+				<TextTranslator {...props} updatePopup={updateHook} opacity={opacity} />
 			) : (
 				<div
 					tabIndex={0}

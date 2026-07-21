@@ -206,13 +206,31 @@ export const OptionsTree: FC<OptionsTreeProps> = ({
 					return (
 						<Textinput
 							state={error !== undefined ? 'error' : undefined}
-							value={value}
+							value={
+								value === undefined || value === null ? '' : String(value)
+							}
 							spellCheck={false}
-							onInputText={(value) => {
-								const parsedNumber = +value;
+							onInputText={(rawValue) => {
+								// Keep incomplete numeric text so decimals like "0." can be typed.
+								// Coercing with `+` turns "0." into 0 and blocks values below 1.
+								const isIncompleteNumber =
+									rawValue === '' ||
+									rawValue === '-' ||
+									rawValue === '+' ||
+									rawValue === '.' ||
+									rawValue === '-.' ||
+									rawValue === '+.' ||
+									/^[+-]?\d+\.$/.test(rawValue);
+
+								if (isIncompleteNumber) {
+									setOptionValueProxy(path, rawValue);
+									return;
+								}
+
+								const parsedNumber = Number(rawValue);
 								setOptionValueProxy(
 									path,
-									isNaN(parsedNumber) ? value : parsedNumber,
+									Number.isNaN(parsedNumber) ? rawValue : parsedNumber,
 								);
 							}}
 						/>

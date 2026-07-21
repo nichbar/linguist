@@ -513,6 +513,18 @@ export const generateTree = ({
 							},
 						},
 						{
+							title: getMessage(
+								'settings_option_selectTranslation_opacity',
+							),
+							description: getMessage(
+								'settings_option_selectTranslation_opacity_desc',
+							),
+							path: 'selectTranslator.opacity',
+							optionContent: {
+								type: 'InputNumber',
+							},
+						},
+						{
 							title: getMessage('settings_option_selectTranslation_zIndex'),
 							description: getMessage(
 								'settings_option_selectTranslation_zIndex_desc',

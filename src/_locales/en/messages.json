@@ -470,6 +470,12 @@
 	"settings_option_selectTranslation_modifiers_key_shift": {
 		"message": "shift"
 	},
+	"settings_option_selectTranslation_opacity": {
+		"message": "Popup opacity"
+	},
+	"settings_option_selectTranslation_opacity_desc": {
+		"message": "Opacity of the selection translation popup card. Use a value between 0 and 1 (for example 0.9)"
+	},
 	"settings_option_selectTranslation_rememberDirection": {
 		"message": "Remember the most recently selected text language"
 	},

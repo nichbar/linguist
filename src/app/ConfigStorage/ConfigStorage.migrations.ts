@@ -212,6 +212,30 @@ const migrations: Migration[] = [
 			await browser.storage.local.set({ [storageName]: updatedConfig });
 		},
 	},
+	{
+		// Add selectTranslator.opacity
+		version: 11,
+		async migrate() {
+			const storageName = 'appConfig';
+
+			let { [storageName]: actualData } =
+				await browser.storage.local.get(storageName);
+			if (typeof actualData !== 'object') {
+				actualData = {};
+			}
+
+			const updatedConfig = {
+				...actualData,
+				selectTranslator: {
+					...actualData?.selectTranslator,
+					opacity: actualData?.selectTranslator?.opacity ?? 1,
+				},
+			};
+
+			// Write data
+			await browser.storage.local.set({ [storageName]: updatedConfig });
+		},
+	},
 ];
 
 export const ConfigStorageMigration = createMigrationTask(migrations, {

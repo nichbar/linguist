@@ -66,6 +66,11 @@ export interface Options {
 	 */
 	showOriginalText: boolean;
 
+	/**
+	 * Opacity of the selection TextTranslator popup card (0–1)
+	 */
+	opacity?: number;
+
 	enableTranslateFromContextMenu?: boolean;
 }
 
@@ -98,6 +103,7 @@ export class SelectTranslator {
 		showOnceForSelection: true,
 		showOriginalText: true,
 		isUseAutoForDetectLang: true,
+		opacity: 1,
 		enableTranslateFromContextMenu: false,
 	};
 
@@ -339,6 +345,7 @@ export class SelectTranslator {
 			timeoutForHideButton,
 			focusOnTranslateButton,
 			showOriginalText,
+			opacity,
 			enableTranslateFromContextMenu,
 		} = this.options;
 
@@ -372,6 +379,7 @@ export class SelectTranslator {
 					zIndex,
 					timeoutForHideButton,
 					focusOnTranslateButton,
+					opacity,
 					text: trimmedText,
 					...fixedPosition,
 				}}

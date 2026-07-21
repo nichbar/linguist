@@ -79,6 +79,10 @@ export const AppConfig = type.type({
 		showOriginalText: type.boolean,
 		isUseAutoForDetectLang: type.boolean,
 		timeoutForHideButton: type.number,
+		/**
+		 * Opacity of the selection TextTranslator popup card (0–1)
+		 */
+		opacity: type.number,
 		mode: type.union([
 			StringLiteralType('popupButton'),
 			StringLiteralType('quickTranslate'),
