@@ -7,7 +7,7 @@
 	"scripts": {
 		"test": "vitest",
 		"test:all": "TEST_TARGETS=all npx vitest",
-		"build:dev": "EXT_TARGET=firefox webpack-cli -wc ./webpack.config.js",
+		"build:dev": "EXT_TARGET=chromium webpack-cli -wc ./webpack.config.js",
 		"build:tokens": "themekit build -c themekit.config.json",
 		"release:patch": "npm version patch",
 		"prettify": "prettier --write \"{*,**/*}.{ts,tsx,js,jsx}\" && eslint --fix \".\" && stylelint --fix \"{*,**/*}.css\"",

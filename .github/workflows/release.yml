@@ -26,25 +26,6 @@ jobs:
           make build
           sudo chown -R $(id -u):$(id -g) ./build
 
-      - name: Build CRX file for chromium
-        working-directory: "./build"
-        env:
-          CHROMIUM_CRX_PEM: ${{ secrets.CHROMIUM_CRX_PEM }}
-        run: |
-          echo "$CHROMIUM_CRX_PEM" > ./crx.pem
-          npx crx pack chromium -o linguist.crx -p ./crx.pem
-          ls -al ./
-
-      - name: Build XPI file for firefox-standalone
-        working-directory: "./build"
-        env:
-          AMO_KEY: ${{ secrets.AMO_KEY }}
-          AMO_SECRET: ${{ secrets.AMO_SECRET }}
-        run: |
-          mkdir ./AMO
-          npx web-ext sign --channel unlisted --api-key "$AMO_KEY" --api-secret "$AMO_SECRET" --source-dir ./firefox-standalone --artifacts-dir ./AMO
-          mv AMO/*.xpi AMO/linguist.xpi
-
       - name: Archive build files
         uses: actions/upload-artifact@v4
         id: upload-build-artifacts
@@ -65,13 +46,4 @@ jobs:
           # Use current commit hash, instead of main branch
           target_commitish: ${{ github.sha }}
           files: |
-            build/AMO/linguist.xpi
-            build/linguist.crx
             build/*.zip
-
-      - name: Build static files for GitHub Pages
-        working-directory: "./build"
-        run: |
-          mkdir ./site
-          node ../scripts/genCrxUpdateManifest.js > ./site/chromium_updates.xml
-          # TODO: build index.html with landing page

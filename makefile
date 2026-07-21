@@ -6,15 +6,10 @@ prepare:
 
 dev: prepare
 	npm run build:dev
-devFirefox: prepare
-	EXT_TARGET=firefox npx webpack-cli -wc ./webpack.config.js
 devChromium: prepare
 	EXT_TARGET=chromium npx webpack-cli -wc ./webpack.config.js
 devChrome: prepare
 	EXT_TARGET=chrome npx webpack-cli -wc ./webpack.config.js
-
-devAndroidFirefox:
-	cd build/dev/firefox && npx web-ext run -t firefox-android --adb-device "${ADB_DEVICE_TO_DEBUG}" --firefox-apk org.mozilla.fenix
 
 clean:
 	rm -rf ./build
@@ -29,12 +24,8 @@ buildThirdparty:
 buildAll:
 	mkdir -p ./build
 	chmod 777 ./build
-	${DOCKER_COMPOSE} run --rm linguist make buildFirefox buildFirefoxStandalone buildChromium buildChrome
+	${DOCKER_COMPOSE} run --rm linguist make buildChromium buildChrome
 
-buildFirefox:
-	NODE_ENV=production EXT_TARGET=firefox npx webpack-cli -c ./webpack.config.js
-buildFirefoxStandalone:
-	NODE_ENV=production EXT_TARGET=firefox-standalone npx webpack-cli -c ./webpack.config.js
 buildChromium:
 	NODE_ENV=production EXT_TARGET=chromium npx webpack-cli -c ./webpack.config.js
 buildChrome:
