@@ -24,7 +24,7 @@ buildThirdparty:
 buildAll:
 	mkdir -p ./build
 	chmod 777 ./build
-	${DOCKER_COMPOSE} run --rm linguist make buildChromium buildChrome
+	${DOCKER_COMPOSE} run --rm linguist make buildChromium
 
 buildChromium:
 	NODE_ENV=production EXT_TARGET=chromium npx webpack-cli -c ./webpack.config.js

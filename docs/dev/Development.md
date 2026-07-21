@@ -20,9 +20,9 @@ If you have an ARM CPU and want to build the code, you can emulate AMD64 and run
 
 ## Partial build
 
-To build the extension for specific browsers only, you may run `make` with a specific target such as `buildChromium` or `buildChrome` (see `makefile` for details). Targets:
-- chrome
-- chromium: special build with auto updates not from the Google Store
+CI and `make build` pack Chromium only. For a specific browser target, run `make` with `buildChromium` or `buildChrome` (see `makefile` for details). Targets:
+- chromium: default release target (auto updates not from the Google Store)
+- chrome: Chrome Web Store variant (local builds)
 
 You must install dependencies and build third party code with `make prepare buildThirdparty` before running a specific target.
 

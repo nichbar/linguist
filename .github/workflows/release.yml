@@ -46,4 +46,4 @@ jobs:
           # Use current commit hash, instead of main branch
           target_commitish: ${{ github.sha }}
           files: |
-            build/*.zip
+            build/chromium.zip

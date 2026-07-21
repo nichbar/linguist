@@ -4,10 +4,10 @@
 
 testDir=tests
 
-# Prefer chrome/chromium zips. web-ext is unstable with Chromium MV3
+# Pack Chromium only. web-ext is unstable with Chromium MV3
 # (MANIFEST_FIELD_UNSUPPORTED for service_worker / EXTENSION_ID_REQUIRED),
 # so we only unpack and verify the archive layout here.
-for packageArchive in `find . -maxdepth 1 -type f \( -name 'chrome.zip' -o -name 'chromium.zip' \) -print`;
+for packageArchive in `find . -maxdepth 1 -type f -name 'chromium.zip' -print`;
 do
 	unpackDir="$testDir/$(basename -s .zip "$packageArchive")"
 
