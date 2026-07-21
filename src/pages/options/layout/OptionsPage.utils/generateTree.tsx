@@ -61,6 +61,31 @@ export const generateTree = ({
 							),
 					},
 				},
+				{
+					title: getMessage('settings_option_fixedSourceLanguage'),
+					description: getMessage('settings_option_fixedSourceLanguage_desc'),
+					path: 'fixedSourceLanguage',
+					optionContent: {
+						type: 'SelectList',
+						options: [
+							{
+								id: '',
+								content: getMessage(
+									'settings_option_fixedSourceLanguage_detect',
+								),
+							},
+							...langCodes
+								.filter((lang, idx, arr) => arr.indexOf(lang) === idx)
+								.map((code) => ({
+									id: code,
+									content: getLanguageNameByCode(code),
+								}))
+								.sort(({ content: a }, { content: b }) =>
+									a > b ? 1 : a < b ? -1 : 0,
+								),
+						],
+					},
+				},
 			],
 		},
 		{

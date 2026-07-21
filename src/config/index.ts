@@ -11,6 +11,8 @@ export const defaultConfig: AppConfigType = {
 	translatorModule: DEFAULT_TRANSLATOR,
 	ttsModule: DEFAULT_TTS,
 	language: getUserLanguage(),
+	// null = detect/auto; ISO 639-1 code = always translate from that language
+	fixedSourceLanguage: null,
 	llmTranslator: {
 		apiKey: '',
 		apiUrl: 'https://api.openai.com/v1/chat/completions',

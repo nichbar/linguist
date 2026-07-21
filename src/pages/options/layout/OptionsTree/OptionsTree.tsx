@@ -250,16 +250,24 @@ export const OptionsTree: FC<OptionsTreeProps> = ({
 							}}
 						/>
 					);
-				case 'SelectList':
+				case 'SelectList': {
+					// Some config fields use `null` for "unset" (e.g. fixedSourceLanguage).
+					// SelectList options encode that as an empty-string id.
+					const selectValue = value === null ? '' : value;
 					return (
 						<Select
 							options={option.options}
-							value={value}
+							value={selectValue}
 							setValue={(newValue) => {
-								setOptionValueProxy(path, newValue);
+								const next =
+									path === 'fixedSourceLanguage' && newValue === ''
+										? null
+										: newValue;
+								setOptionValueProxy(path, next);
 							}}
 						/>
 					);
+				}
 			}
 		},
 		[setOptionValueProxy],

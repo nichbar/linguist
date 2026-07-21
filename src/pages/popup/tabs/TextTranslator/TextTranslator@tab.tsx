@@ -110,8 +110,14 @@ export const TextTranslatorTab: TabComponent<InitFn<InitData>> = ({
 			translatorFeatures={translatorFeatures}
 			translateHook={sendTranslateRequest}
 			spellCheck={config.textTranslator.spellCheck}
-			enableLanguageSuggestions={config.textTranslator.suggestLanguage}
-			enableLanguageSuggestionsAlways={config.textTranslator.suggestLanguageAlways}
+			enableLanguageSuggestions={
+				config.fixedSourceLanguage === null &&
+				config.textTranslator.suggestLanguage
+			}
+			enableLanguageSuggestionsAlways={
+				config.fixedSourceLanguage === null &&
+				config.textTranslator.suggestLanguageAlways
+			}
 			{...{
 				from,
 				setFrom,
@@ -129,9 +135,15 @@ export const TextTranslatorTab: TabComponent<InitFn<InitData>> = ({
 };
 
 TextTranslatorTab.init = async ({ translatorFeatures, config }) => {
-	let from = translatorFeatures.isSupportAutodetect
-		? 'auto'
-		: translatorFeatures.supportedLanguages[0];
+	const { isSupportAutodetect, supportedLanguages } = translatorFeatures;
+	const fixedSource = config.fixedSourceLanguage;
+
+	let from =
+		fixedSource !== null && supportedLanguages.includes(fixedSource)
+			? fixedSource
+			: isSupportAutodetect
+				? 'auto'
+				: supportedLanguages[0];
 	let to = config.language;
 
 	// Try recovery state
@@ -140,14 +152,16 @@ TextTranslatorTab.init = async ({ translatorFeatures, config }) => {
 	const textTranslatorStorage = new TextTranslatorStorage();
 	const lastState = await textTranslatorStorage.getData();
 	if (lastState !== null) {
-		const { isSupportAutodetect, supportedLanguages } = translatorFeatures;
 		const { from: lastFrom, to: lastTo, translate } = lastState;
 
-		if (
-			(lastFrom === 'auto' && isSupportAutodetect) ||
-			supportedLanguages.includes(lastFrom)
-		) {
-			from = lastFrom;
+		// When a fixed source language is configured, ignore recovered `from`
+		if (fixedSource === null) {
+			if (
+				(lastFrom === 'auto' && isSupportAutodetect) ||
+				supportedLanguages.includes(lastFrom)
+			) {
+				from = lastFrom;
+			}
 		}
 
 		if (supportedLanguages.includes(lastTo)) {

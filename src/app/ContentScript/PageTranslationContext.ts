@@ -173,6 +173,11 @@ export class PageTranslationContext {
 
 		// Scan page to collect data
 		const scanPageFx = createEffect(async (config: AppConfigType) => {
+			// Prefer fixed source language over detection when configured
+			if (config.fixedSourceLanguage !== null) {
+				return { pageLanguage: config.fixedSourceLanguage };
+			}
+
 			const pageLanguage = await getPageLanguage(
 				config.pageTranslator.detectLanguageByContent,
 			);
@@ -248,7 +253,10 @@ export class PageTranslationContext {
 		// TODO: make it option
 		const isAllowTranslateSameLanguages = true;
 
-		const pageLanguage = pageData.language;
+		const pageLanguage =
+			config.fixedSourceLanguage !== null
+				? config.fixedSourceLanguage
+				: pageData.language;
 		const userLanguage = config.language;
 
 		// Skip by language directions

@@ -125,12 +125,21 @@ export const TextTranslator: FC<TextTranslatorComponentProps> = ({
 	useEffect(() => {
 		getTranslatorFeatures().then(
 			async ({ supportedLanguages, isSupportAutodetect }) => {
-				const userLanguage = await getUserLanguagePreferences();
+				const [userLanguage, config] = await Promise.all([
+					getUserLanguagePreferences(),
+					getConfig(),
+				]);
 
 				let from: string | undefined;
 
+				// Fixed source language overrides detection / remembered direction
+				const fixedSource = config.fixedSourceLanguage;
+				if (fixedSource !== null && supportedLanguages.includes(fixedSource)) {
+					from = fixedSource;
+				}
+
 				// Try recover last direction
-				if (rememberDirection) {
+				if (from === undefined && rememberDirection) {
 					try {
 						// TODO: migrate data to another storage property
 						// TODO: move storage operations to a hook
@@ -280,24 +289,18 @@ export const TextTranslator: FC<TextTranslatorComponentProps> = ({
 		}
 	}, [from, rememberDirection]);
 
+	// Translate once init is ready, and again when language/text changes
+	// (both are covered by `translateText` identity via its useCallback deps).
+	// Do not split this into multiple effects keyed on `isInited` — they would
+	// both fire on the same commit and send duplicate LLM requests.
 	useEffect(() => {
-		// Wait init
 		if (!isInited) return;
 		translateText();
-	}, [isInited, translateText, translatorFeatures]);
+	}, [isInited, translateText]);
 
 	useEffect(() => {
 		if (updatePopup) updatePopup();
 	});
-
-	// Translate by update original text
-	useEffect(() => {
-		// Wait init
-		if (!isInited) return;
-		translateText();
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isInited, originalText]);
 
 	const isMobile = useMemo(() => isMobileBrowser(), []);
 

@@ -347,8 +347,16 @@ PageTranslatorTab.init = async ({ translatorFeatures, config }): Promise<InitDat
 		to = translateDirection.to;
 	}
 
-	// Set page language as "from" if page is not in translation
-	if (!isTranslated) {
+	// Prefer fixed source language when page is not already translating
+	const fixedSource = config.fixedSourceLanguage;
+	if (
+		!isTranslated &&
+		fixedSource !== null &&
+		translatorFeatures.supportedLanguages.includes(fixedSource)
+	) {
+		from = fixedSource;
+	} else if (!isTranslated) {
+		// Set page language as "from" if page is not in translation
 		from = await getPageLanguage(tabId);
 	}
 

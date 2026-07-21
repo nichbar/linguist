@@ -38,6 +38,11 @@ export const LangCodeWithAuto = new type.Type<string, string, unknown>(
 
 export const AppConfig = type.type({
 	language: type.string,
+	/**
+	 * When set, skip language detection and always translate from this language.
+	 * `null` keeps the normal detect / auto behavior.
+	 */
+	fixedSourceLanguage: type.union([type.null, LangCode]),
 	translatorModule: type.string,
 	ttsModule: type.string,
 	/**
