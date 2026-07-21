@@ -203,10 +203,16 @@ export const TextTranslatorPopup: FC<TextTranslatorPopupProps> = ({
 
 	const isMobile = useMemo(() => isMobileBrowser(), []);
 
+	const clampedOpacity = Math.min(1, Math.max(0, opacity));
+
 	const content = (
-		<div tabIndex={0} ref={containerRef}>
+		<div
+			tabIndex={0}
+			ref={containerRef}
+			style={translating ? { opacity: clampedOpacity } : undefined}
+		>
 			{translating ? (
-				<TextTranslator {...props} updatePopup={updateHook} opacity={opacity} />
+				<TextTranslator {...props} updatePopup={updateHook} />
 			) : (
 				<div
 					tabIndex={0}

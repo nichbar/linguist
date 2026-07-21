@@ -35,10 +35,6 @@ export interface TextTranslatorComponentProps {
 	pageLanguage?: string;
 	/** Kept for API compatibility; original text is no longer shown in the selection popup */
 	showOriginalText?: boolean;
-	/**
-	 * Opacity of the popup card (0–1)
-	 */
-	opacity?: number;
 }
 
 // TODO: rename component and move to element dir
@@ -51,7 +47,6 @@ export const TextTranslator: FC<TextTranslatorComponentProps> = ({
 	closeHandler,
 	translate,
 	updatePopup,
-	opacity = 1,
 }) => {
 	const [from, setFrom] = useState<string>();
 	const [to, setTo] = useState<string>();
@@ -308,12 +303,7 @@ export const TextTranslator: FC<TextTranslatorComponentProps> = ({
 
 	if (translatorFeatures !== undefined && (translatedText !== null || error !== null)) {
 		return (
-			<div
-				className={cnTextTranslator({ mobile: isMobile })}
-				style={{
-					opacity: Math.min(1, Math.max(0, opacity)),
-				}}
-			>
+			<div className={cnTextTranslator({ mobile: isMobile })}>
 				<div className={cnTextTranslator('Head', { mobile: isMobile })}>
 					{isMobile && (
 						<div className={cnTextTranslator('MobileHead')}>
@@ -407,14 +397,6 @@ export const TextTranslator: FC<TextTranslatorComponentProps> = ({
 			</div>
 		);
 	} else {
-		return (
-			<div
-				style={{
-					opacity: Math.min(1, Math.max(0, opacity)),
-				}}
-			>
-				<Loader className={cnTextTranslator('Loader')} />
-			</div>
-		);
+		return <Loader className={cnTextTranslator('Loader')} />;
 	}
 };
