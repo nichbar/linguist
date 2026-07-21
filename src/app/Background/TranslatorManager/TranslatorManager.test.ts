@@ -42,6 +42,11 @@ const defaultConfig = {
 	cache: {
 		ignoreCase: true,
 	},
+	llmTranslator: {
+		apiKey: '',
+		apiUrl: 'https://api.openai.com/v1/chat/completions',
+		model: 'gpt-4o-mini',
+	},
 };
 
 test('TranslatorManager thrown error when translator module not found', () => {

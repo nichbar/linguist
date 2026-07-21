@@ -40,6 +40,14 @@ export const AppConfig = type.type({
 	language: type.string,
 	translatorModule: type.string,
 	ttsModule: type.string,
+	/**
+	 * Options for the built-in OpenAI-compatible LLM translator
+	 */
+	llmTranslator: type.type({
+		apiKey: type.string,
+		apiUrl: type.string,
+		model: type.string,
+	}),
 	scheduler: type.type({
 		useCache: type.boolean,
 		translateRetryAttemptLimit: type.number,

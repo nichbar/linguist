@@ -25,6 +25,13 @@ export interface OptionInputNumber {
 	type: 'InputNumber';
 }
 
+export interface OptionInputText {
+	type: 'InputText';
+	password?: boolean;
+	placeholder?: string;
+	spellCheck?: boolean;
+}
+
 export interface OptionInputMultilineFromArray {
 	type: 'InputMultilineFromArray';
 }
@@ -63,6 +70,7 @@ export interface OptionItem {
 	optionContent:
 		| OptionSelectList
 		| OptionInputNumber
+		| OptionInputText
 		| OptionInputMultilineFromArray
 		| OptionCheckbox
 		| OptionCheckboxGroup
@@ -206,6 +214,21 @@ export const OptionsTree: FC<OptionsTreeProps> = ({
 									path,
 									isNaN(parsedNumber) ? value : parsedNumber,
 								);
+							}}
+						/>
+					);
+				case 'InputText':
+					return (
+						<Textinput
+							state={error !== undefined ? 'error' : undefined}
+							value={value ?? ''}
+							placeholder={option.placeholder}
+							spellCheck={option.spellCheck ?? false}
+							controlProps={{
+								type: option.password ? 'password' : 'text',
+							}}
+							onInputText={(value) => {
+								setOptionValueProxy(path, value);
 							}}
 						/>
 					);

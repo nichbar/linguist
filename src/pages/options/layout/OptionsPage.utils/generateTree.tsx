@@ -83,6 +83,46 @@ export const generateTree = ({
 							},
 						},
 				{
+					title: getMessage('settings_option_llmTranslator'),
+					description: getMessage('settings_option_llmTranslator_desc'),
+					groupContent: [
+						{
+							title: getMessage('settings_option_llmTranslator_apiKey'),
+							description: getMessage(
+								'settings_option_llmTranslator_apiKey_desc',
+							),
+							path: 'llmTranslator.apiKey',
+							optionContent: {
+								type: 'InputText',
+								password: true,
+								placeholder: 'sk-...',
+							},
+						},
+						{
+							title: getMessage('settings_option_llmTranslator_apiUrl'),
+							description: getMessage(
+								'settings_option_llmTranslator_apiUrl_desc',
+							),
+							path: 'llmTranslator.apiUrl',
+							optionContent: {
+								type: 'InputText',
+								placeholder: 'https://api.openai.com/v1/chat/completions',
+							},
+						},
+						{
+							title: getMessage('settings_option_llmTranslator_model'),
+							description: getMessage(
+								'settings_option_llmTranslator_model_desc',
+							),
+							path: 'llmTranslator.model',
+							optionContent: {
+								type: 'InputText',
+								placeholder: 'gpt-4o-mini',
+							},
+						},
+					],
+				},
+				{
 					title: getMessage('settings_option_customTranslatorModule'),
 					description: getLocalizedNode({
 						messageName: 'settings_option_customTranslatorModule_desc',

@@ -20,6 +20,10 @@
 	"common_error": {
 		"message": "Error"
 	},
+	"common_llmTranslator": {
+		"message": "LLM translator",
+		"description": "Name of the built-in OpenAI-compatible LLM translation module"
+	},
 	"common_offlineTranslator": {
 		"message": "$1 - Offline translator"
 	},
@@ -150,11 +154,11 @@
 	"history_searchPlaceholder": {
 		"message": "Search by text"
 	},
-	"inlineTranslator_showOriginalText": {
-		"message": "Show original text"
-	},
 	"inlineTranslator_hideOriginalText": {
 		"message": "Hide original text"
+	},
+	"inlineTranslator_showOriginalText": {
+		"message": "Show original text"
 	},
 	"inlineTranslator_translatedBy": {
 		"message": "Translated by $1",
@@ -326,6 +330,31 @@
 	},
 	"settings_option_history_enable_desc": {
 		"message": "When enabled, translations will be recorded and appear on the <slot id=historyPage>history page</slot>"
+	},
+	"settings_option_llmTranslator": {
+		"message": "LLM translator",
+		"description": "Settings group for the built-in LLM translator"
+	},
+	"settings_option_llmTranslator_apiKey": {
+		"message": "API key"
+	},
+	"settings_option_llmTranslator_apiKey_desc": {
+		"message": "Bearer token sent in the Authorization header"
+	},
+	"settings_option_llmTranslator_apiUrl": {
+		"message": "API URL"
+	},
+	"settings_option_llmTranslator_apiUrl_desc": {
+		"message": "Full chat completions endpoint URL (for example OpenAI, DeepSeek, Ollama, or a local proxy)"
+	},
+	"settings_option_llmTranslator_desc": {
+		"message": "Configure the OpenAI-compatible chat completions endpoint used when the LLM translation module is selected"
+	},
+	"settings_option_llmTranslator_model": {
+		"message": "Model"
+	},
+	"settings_option_llmTranslator_model_desc": {
+		"message": "Model id passed to the chat completions API"
 	},
 	"settings_option_pageTranslation": {
 		"message": "The full page translation"

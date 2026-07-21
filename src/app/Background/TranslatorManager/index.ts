@@ -7,7 +7,10 @@ import { RecordValues } from '../../../types/utils';
 import { TranslatorsCacheStorage } from '../TranslatorsCacheStorage';
 import { TranslatorsMap } from '..';
 
-export type Config = Pick<AppConfigType, 'translatorModule' | 'scheduler' | 'cache'>;
+export type Config = Pick<
+	AppConfigType,
+	'translatorModule' | 'scheduler' | 'cache' | 'llmTranslator'
+>;
 
 /**
  * Build and manage a translation scheduler
@@ -85,7 +88,11 @@ export class TranslatorManager<Translators extends TranslatorsMap = TranslatorsM
 		if (!forceCreate && this.translator !== null) return this.translator;
 
 		const translatorClass = this.getTranslatorClass();
-		this.translator = new translatorClass() as InstanceType<
+		const translatorOptions =
+			this.config.translatorModule === 'LLMTranslator'
+				? this.config.llmTranslator
+				: undefined;
+		this.translator = new translatorClass(translatorOptions) as InstanceType<
 			RecordValues<Translators>
 		>;
 

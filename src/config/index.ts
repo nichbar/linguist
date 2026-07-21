@@ -11,6 +11,11 @@ export const defaultConfig: AppConfigType = {
 	translatorModule: DEFAULT_TRANSLATOR,
 	ttsModule: DEFAULT_TTS,
 	language: getUserLanguage(),
+	llmTranslator: {
+		apiKey: '',
+		apiUrl: 'https://api.openai.com/v1/chat/completions',
+		model: 'gpt-4o-mini',
+	},
 	scheduler: {
 		useCache: true,
 		translateRetryAttemptLimit: 2,

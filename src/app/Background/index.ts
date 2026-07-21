@@ -9,6 +9,7 @@ import { isEqual } from 'lodash';
 
 import { createSelector } from '../../lib/effector/createSelector';
 import { BergamotTranslator } from '../../lib/translators/bergamot/BergamotTranslator';
+import { LLMTranslator } from '../../lib/translators/llm/LLMTranslator';
 import {
 	createPromiseWithControls,
 	PromiseWithControls,
@@ -26,6 +27,7 @@ export const embeddedTranslators = {
 	GoogleTranslator,
 	YandexTranslator,
 	BergamotTranslator,
+	LLMTranslator,
 } as const;
 
 /**
@@ -89,10 +91,11 @@ export class Background {
 		const $config = await this.config.getObservableStore();
 		const $translateManagerConfig = createSelector(
 			$config,
-			({ scheduler, translatorModule, cache }) => ({
+			({ scheduler, translatorModule, cache, llmTranslator }) => ({
 				scheduler,
 				translatorModule,
 				cache,
+				llmTranslator,
 			}),
 			{
 				updateFilter: (update, state) => !isEqual(update, state),

@@ -186,6 +186,32 @@ const migrations: Migration[] = [
 			await browser.storage.local.set({ [storageName]: updatedConfig });
 		},
 	},
+	{
+		// Add LLM translator settings
+		version: 10,
+		async migrate() {
+			const storageName = 'appConfig';
+
+			let { [storageName]: actualData } =
+				await browser.storage.local.get(storageName);
+			if (typeof actualData !== 'object') {
+				actualData = {};
+			}
+
+			const updatedConfig = {
+				...actualData,
+				llmTranslator: {
+					apiKey: '',
+					apiUrl: 'https://api.openai.com/v1/chat/completions',
+					model: 'gpt-4o-mini',
+					...actualData?.llmTranslator,
+				},
+			};
+
+			// Write data
+			await browser.storage.local.set({ [storageName]: updatedConfig });
+		},
+	},
 ];
 
 export const ConfigStorageMigration = createMigrationTask(migrations, {
