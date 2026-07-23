@@ -2,10 +2,8 @@ import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 're
 import browser from 'webextension-polyfill';
 import { cn } from '@bem-react/classname';
 
-import { LanguagePanel } from '../../../../../../components/controls/LanguagePanel/LanguagePanel';
 // Components
 import { Button } from '../../../../../../components/primitives/Button/Button.bundle/desktop';
-import { Icon } from '../../../../../../components/primitives/Icon/Icon.bundle/desktop';
 import { Loader } from '../../../../../../components/primitives/Loader/Loader';
 import { isMobileBrowser } from '../../../../../../lib/browser';
 import { detectLanguage, getMessage } from '../../../../../../lib/language';
@@ -27,7 +25,6 @@ export interface TextTranslatorComponentProps {
 	rememberDirection: boolean;
 	text: string;
 	translate: (text: string, from: string, to: string) => Promise<string>;
-	closeHandler: () => void;
 	/**
 	 * Recalculate popup position
 	 */
@@ -44,7 +41,6 @@ export const TextTranslator: FC<TextTranslatorComponentProps> = ({
 	isUseAutoForDetectLang,
 	rememberDirection,
 	text,
-	closeHandler,
 	translate,
 	updatePopup,
 }) => {
@@ -52,7 +48,7 @@ export const TextTranslator: FC<TextTranslatorComponentProps> = ({
 	const [to, setTo] = useState<string>();
 	const [translatorFeatures, setTranslatorFeatures] = useState<TranslatorFeatures>();
 
-	const [originalText, setOriginalText] = useState<string>(text);
+	const [originalText] = useState<string>(text);
 	const [translatedText, setTranslatedText] = useState<string | null>(null);
 	const [error, setError] = useState<string | null>(null);
 	const [providerName, setProviderName] = useState<string | null>(null);
@@ -107,18 +103,6 @@ export const TextTranslator: FC<TextTranslatorComponentProps> = ({
 				translateContext.current = Symbol('TranslateContext');
 			});
 	}, [from, originalText, to, translate]);
-
-	const swapHandler = useCallback(
-		({ from, to }: { from: string; to: string }) => {
-			if (translatedText === null) return;
-
-			setFrom(from);
-			setTo(to);
-			setOriginalText(translatedText);
-			setTranslatedText(null);
-		},
-		[translatedText],
-	);
 
 	// Init
 	const isUnmount = useRef(false);
@@ -257,6 +241,13 @@ export const TextTranslator: FC<TextTranslatorComponentProps> = ({
 				if (isUnmount.current) return;
 
 				const moduleId = config.translatorModule;
+				// For the LLM translator, show the configured model instead of the generic name
+				if (moduleId === 'LLMTranslator') {
+					const model = config.llmTranslator?.model?.trim();
+					setProviderName(model || translators[moduleId] || moduleId);
+					return;
+				}
+
 				setProviderName(translators[moduleId] ?? moduleId);
 			})
 			.catch(console.error);
@@ -304,54 +295,11 @@ export const TextTranslator: FC<TextTranslatorComponentProps> = ({
 
 	const isMobile = useMemo(() => isMobileBrowser(), []);
 
+	// Language panel and close button are intentionally omitted: outside click
+	// closes the popup, and source/target languages come from settings.
 	if (translatorFeatures !== undefined && (translatedText !== null || error !== null)) {
 		return (
 			<div className={cnTextTranslator({ mobile: isMobile })}>
-				<div className={cnTextTranslator('Head', { mobile: isMobile })}>
-					{isMobile && (
-						<div className={cnTextTranslator('MobileHead')}>
-							<Button
-								view="clear"
-								// `onPress` is not work in shadow DOM
-								onPress={closeHandler}
-								title={getMessage('common_close')}
-								content="icon"
-							>
-								<Icon glyph="close" />
-							</Button>
-						</div>
-					)}
-
-					<div className={cnTextTranslator('Languages')}>
-						<LanguagePanel
-							languages={translatorFeatures.supportedLanguages}
-							auto={translatorFeatures.isSupportAutodetect}
-							setFrom={setFrom}
-							setTo={setTo}
-							from={from}
-							to={to}
-							swapHandler={swapHandler}
-							disableSwap={translatedText === null}
-							mobile={isMobile}
-							view={isMobile ? 'wide' : 'compact'}
-						/>
-					</div>
-
-					{!isMobile && (
-						<div className={cnTextTranslator('Close')}>
-							<Button
-								view="clear"
-								// `onPress` is not work in shadow DOM
-								onPress={closeHandler}
-								title={getMessage('common_close')}
-								content="icon"
-							>
-								<Icon glyph="close" />
-							</Button>
-						</div>
-					)}
-				</div>
-
 				{error === null ? (
 					<>
 						<div className={cnTextTranslator('Main')}>
@@ -399,7 +347,7 @@ export const TextTranslator: FC<TextTranslatorComponentProps> = ({
 				)}
 			</div>
 		);
-	} else {
-		return <Loader className={cnTextTranslator('Loader')} />;
 	}
+
+	return <Loader className={cnTextTranslator('Loader')} />;
 };

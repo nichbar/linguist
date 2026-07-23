@@ -5,7 +5,6 @@ import {
 } from '../../lib/migrations/MigrationsExecutor/PersistentMigrationsExecutor';
 import { PopupWindowStorageMigration } from '../../pages/popup/layout/PopupWindow.utils/PopupWindowStorage.migrations';
 import { TextTranslatorStorageMigration } from '../../pages/popup/tabs/TextTranslator/TextTranslator.utils/TextTranslatorStorage.migrations';
-import { AutoTranslationMigration } from '../../requests/backend/autoTranslation/autoTranslation.migrations';
 
 import { TranslatorsCacheStorageMigration } from '../Background/TranslatorsCacheStorage/TranslatorsCacheStorage.migrations';
 import { ConfigStorageMigration } from '../ConfigStorage/ConfigStorage.migrations';
@@ -27,10 +26,6 @@ const migrationsList: PersistentMigrationTask[] = [
 	{
 		name: 'PopupWindowStorage',
 		migration: PopupWindowStorageMigration,
-	},
-	{
-		name: 'autoTranslationPreferences',
-		migration: AutoTranslationMigration,
 	},
 ];
 

@@ -260,6 +260,34 @@ const migrations: Migration[] = [
 			await browser.storage.local.set({ [storageName]: updatedConfig });
 		},
 	},
+	{
+		// Remove page translation feature
+		version: 13,
+		async migrate() {
+			const storageName = 'appConfig';
+
+			let { [storageName]: actualData } =
+				await browser.storage.local.get(storageName);
+			if (typeof actualData !== 'object' || actualData === null) {
+				actualData = {};
+			}
+
+			const updatedConfig = { ...actualData };
+			delete updatedConfig.pageTranslator;
+			delete updatedConfig.popupTab;
+
+			if (
+				updatedConfig.selectTranslator &&
+				typeof updatedConfig.selectTranslator === 'object'
+			) {
+				const selectTranslator = { ...updatedConfig.selectTranslator };
+				delete selectTranslator.disableWhileTranslatePage;
+				updatedConfig.selectTranslator = selectTranslator;
+			}
+
+			await browser.storage.local.set({ [storageName]: updatedConfig });
+		},
+	},
 ];
 
 export const ConfigStorageMigration = createMigrationTask(migrations, {

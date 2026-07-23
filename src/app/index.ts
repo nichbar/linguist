@@ -12,7 +12,6 @@ import { AppConfigType } from '../types/runtime';
 import { Background } from './Background';
 import { requestHandlers } from './Background/requestHandlers';
 import { ConfigStorage, ObservableAsyncStorage } from './ConfigStorage/ConfigStorage';
-import { TranslatePageContextMenu } from './ContextMenus/TranslatePageContextMenu';
 import { TranslateSelectionContextMenu } from './ContextMenus/TranslateSelectionContextMenu';
 import { migrateAll } from './migrations/migrationsList';
 
@@ -163,23 +162,12 @@ export class App {
 					translateSelectionContextMenu.disable();
 				}
 			});
-
-		const translatePageContextMenu = new TranslatePageContextMenu();
-		$appConfig
-			.map((config) => config.pageTranslator.enableContextMenu)
-			.watch((isEnabled) => {
-				if (isEnabled) {
-					translatePageContextMenu.enable();
-				} else {
-					translatePageContextMenu.disable();
-				}
-			});
 	}
 
 	private readonly onInstalled = async (details: OnInstalledData) => {
 		if (details === null) return;
 
-		// Inject content scripts for chrome, to make page translation available just after install
+		// Inject content scripts for chrome, so selection translate works just after install
 		if (isChromium()) {
 			const tabs = await getAllTabs();
 			tabs.forEach((tab) => {

@@ -9,15 +9,12 @@ import { getMessage } from '../../lib/language';
 import { getConfig } from '../../requests/backend/getConfig';
 import { getTranslatorFeatures } from '../../requests/backend/getTranslatorFeatures';
 import { ping as pingBackend } from '../../requests/backend/ping';
-// Requests
-import { ping as pingClient } from '../../requests/contentscript/ping';
 // Resources
 import { theme } from '../../themes/presets/default/desktop';
 import { AppConfigType } from '../../types/runtime';
 
 import { IPopupWindowTab, PopupWindow, TranslatorFeatures } from './layout/PopupWindow';
 import { PopupWindowStorage } from './layout/PopupWindow.utils/PopupWindowStorage';
-import { PageTranslatorTab } from './tabs/PageTranslator/PageTranslator@tab';
 // Tabs
 import { TextTranslatorTab } from './tabs/TextTranslator/TextTranslator@tab';
 
@@ -31,15 +28,6 @@ const baseTabs: IPopupWindowTab[] = [
 		component: TextTranslatorTab,
 	},
 ];
-
-const contentScriptRequiredTabs: IPopupWindowTab[] = [
-	{
-		id: 'translatePage',
-		component: PageTranslatorTab,
-	},
-];
-
-const tabsOrder = ['translatePage', 'translateText'];
 
 const PopupPage: FC<PopupPageProps> = ({ rootElement }) => {
 	const [tabs, setTabs] = useState<IPopupWindowTab[]>();
@@ -91,38 +79,16 @@ const PopupPage: FC<PopupPageProps> = ({ rootElement }) => {
 
 	// Init
 	useEffect(() => {
-		const tabs: IPopupWindowTab[] = [];
-
-		Promise.all([
-			// Contentscript may be not available, it's ok for special pages
-			pingClient({ timeout: 200 }).then((isSuccess) => {
-				if (isSuccess) {
-					tabs.push(...contentScriptRequiredTabs);
-				}
-			}),
-
-			// Background is required
-			pingBackend({ timeout: 1000 }).then((isSuccess) => {
+		// Background is required
+		pingBackend({ timeout: 1000 })
+			.then((isSuccess) => {
 				if (!isSuccess) {
 					throw new Error(getMessage('common_bgUnavailable'));
 				}
 
-				tabs.push(...baseTabs);
-
-				// Set config
+				setTabs([...baseTabs]);
 				getConfig().then(setConfig);
-
-				// Set features
 				getTranslatorFeatures().then(setTranslatorFeatures);
-			}),
-		])
-			.then(() => {
-				// Sort tabs list and set
-				const sortedTabs = tabs.sort(
-					(a, b) => tabsOrder.indexOf(a.id) - tabsOrder.indexOf(b.id),
-				);
-
-				setTabs(sortedTabs);
 			})
 			.catch((reason) => {
 				setError(

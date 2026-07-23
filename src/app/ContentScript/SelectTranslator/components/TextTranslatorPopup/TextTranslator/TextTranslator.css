@@ -26,37 +26,6 @@
 	outline: none !important;
 }
 
-/* Head */
-.TextTranslator-Head {
-	display: flex;
-	align-items: center;
-	gap: var(--typography-layout-indent-m-all);
-	min-width: 0;
-}
-
-.TextTranslator-Head_mobile {
-	flex-direction: column;
-	align-items: stretch;
-	gap: var(--typography-layout-indent-s-all);
-}
-
-.TextTranslator-Languages {
-	flex: 1 1 auto;
-	min-width: 0;
-}
-
-.TextTranslator-Close {
-	flex-shrink: 0;
-	margin-left: auto;
-}
-
-.TextTranslator-MobileHead {
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
-	width: 100%;
-}
-
 /* Main: translation body */
 .TextTranslator-Main {
 	display: flex;

@@ -9,7 +9,7 @@ import { ConfigStorageMigration } from '../ConfigStorage.migrations';
 import configVersion1 from './config-v1.json';
 import configVersion3 from './config-v3.json';
 
-const latestVersion = 12;
+const latestVersion = 13;
 
 describe('config migrations', () => {
 	beforeAll(clearAllMocks);

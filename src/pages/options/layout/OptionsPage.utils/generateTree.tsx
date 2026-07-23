@@ -5,7 +5,6 @@ import {
 	getLanguageNameByCode,
 	getLocalizedNode,
 	getMessage,
-	getUserLanguage,
 } from '../../../../lib/language';
 import { capitalizeString } from '../../../../lib/utils';
 
@@ -258,103 +257,6 @@ export const generateTree = ({
 			],
 		},
 		{
-			title: getMessage('settings_option_pageTranslation'),
-			groupContent: [
-				{
-					description: getMessage(
-						'settings_option_pageTranslation_lazyTranslate_desc',
-					),
-					path: 'pageTranslator.lazyTranslate',
-					optionContent: {
-						type: 'Checkbox',
-						text: getMessage('settings_option_pageTranslation_lazyTranslate'),
-					},
-				},
-				{
-					description: getLocalizedNode({
-						messageName:
-							'settings_option_pageTranslation_detectLanguageByContent_desc',
-						slots: {
-							docs: buildLink(
-								'https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/lang',
-							),
-						},
-					}),
-					path: 'pageTranslator.detectLanguageByContent',
-					optionContent: {
-						type: 'Checkbox',
-						text: getMessage(
-							'settings_option_pageTranslation_detectLanguageByContent',
-						),
-					},
-				},
-				{
-					path: 'pageTranslator.enableContextMenu',
-					description: getMessage(
-						'settings_option_pageTranslation_enableContextMenu_desc',
-					),
-					optionContent: {
-						type: 'Checkbox',
-						text: getMessage(
-							'settings_option_pageTranslation_enableContextMenu',
-						),
-					},
-				},
-				{
-					path: 'pageTranslator.toggleTranslationHotkey',
-					title: getMessage(
-						'settings_option_pageTranslation_shortcut_toggleTranslation',
-					),
-					description: getMessage(
-						'settings_option_pageTranslation_shortcut_toggleTranslation_desc',
-					),
-					optionContent: {
-						type: 'Hotkey',
-					},
-				},
-				{
-					path: 'pageTranslator.originalTextPopup',
-					description: getMessage(
-						'settings_option_pageTranslation_originalTextPopup_desc',
-					),
-					optionContent: {
-						type: 'Checkbox',
-						text: getMessage(
-							'settings_option_pageTranslation_originalTextPopup',
-						),
-					},
-				},
-				{
-					title: getMessage(
-						'settings_option_pageTranslation_translatableAttributes',
-					),
-					description: getLocalizedNode({
-						messageName:
-							'settings_option_pageTranslation_translatableAttributes_desc',
-						slots: {
-							htmlAttributes: buildLink(
-								`https://developer.mozilla.org/${getUserLanguage()}/docs/Web/HTML/Attributes`,
-							),
-						},
-					}),
-					path: 'pageTranslator.translatableAttributes',
-					optionContent: {
-						type: 'InputMultilineFromArray',
-					},
-				},
-				{
-					title: getMessage('settings_option_pageTranslation_excludeSelectors'),
-					description: getMessage(
-						'settings_option_pageTranslation_excludeSelectors_desc',
-					),
-					path: 'pageTranslator.excludeSelectors',
-					optionContent: {
-						type: 'InputMultilineFromArray',
-					},
-				},
-			],
-		},
-		{
 			title: getMessage('settings_option_selectTranslation'),
 			groupContent: [
 				{
@@ -433,15 +335,6 @@ export const generateTree = ({
 						type: 'Checkbox',
 						text: getMessage(
 							'settings_option_selectTranslation_strictSelection',
-						),
-					},
-				},
-				{
-					path: 'selectTranslator.disableWhileTranslatePage',
-					optionContent: {
-						type: 'Checkbox',
-						text: getMessage(
-							'settings_option_selectTranslation_disableWhileTranslatePage',
 						),
 					},
 				},
@@ -603,29 +496,6 @@ export const generateTree = ({
 							'settings_option_textTranslator_suggestLanguageAlways',
 						),
 					},
-				},
-			],
-		},
-
-		{
-			title: getMessage('settings_section_popup'),
-			groupContent: [
-				{
-					title: getMessage('settings_option_pageTranslation'),
-					groupContent: [
-						{
-							description: getMessage(
-								'settings_option_popupTab_pageTranslator_showCounters_desc',
-							),
-							path: 'popupTab.pageTranslator.showCounters',
-							optionContent: {
-								type: 'Checkbox',
-								text: getMessage(
-									'settings_option_popupTab_pageTranslator_showCounters',
-								),
-							},
-						},
-					],
 				},
 			],
 		},

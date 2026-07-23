@@ -59,10 +59,9 @@ export const TextTranslatorPopup: FC<TextTranslatorPopupProps> = ({
 	quickTranslate = false,
 	focusOnTranslateButton = false,
 	opacity = 1,
+	closeHandler,
 	...props
 }) => {
-	const { closeHandler } = props;
-
 	const [translating, setTranslating] = useState(quickTranslate);
 
 	const doTranslate = useCallback(() => {
@@ -256,7 +255,13 @@ export const TextTranslatorPopup: FC<TextTranslatorPopupProps> = ({
 	if (isMobile && translating) {
 		return (
 			<div className={cnTextTranslatorPopup({ mobile: true }, [cnTheme(theme)])}>
-				<Modal view="default" visible preventBodyScroll zIndex={zIndex}>
+				<Modal
+					view="default"
+					visible
+					preventBodyScroll
+					zIndex={zIndex}
+					onClose={closeHandler}
+				>
 					{content}
 				</Modal>
 			</div>

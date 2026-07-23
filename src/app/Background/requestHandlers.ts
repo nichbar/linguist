@@ -1,11 +1,4 @@
 // Request handlers
-import { addLanguagePreferencesFactory } from '../../requests/backend/autoTranslation/languagePreferences/addLanguagePreferences';
-import { deleteLanguagePreferencesFactory } from '../../requests/backend/autoTranslation/languagePreferences/deleteLanguagePreferences';
-import { getLanguagePreferencesFactory } from '../../requests/backend/autoTranslation/languagePreferences/getLanguagePreferences';
-import { deleteSitePreferencesFactory } from '../../requests/backend/autoTranslation/sitePreferences/deleteSitePreferences';
-import { getSitePreferencesFactory } from '../../requests/backend/autoTranslation/sitePreferences/getSitePreferences';
-// Auto translation
-import { setSitePreferencesFactory } from '../../requests/backend/autoTranslation/sitePreferences/setSitePreferences';
 import { bergamotHandlersFactory } from '../../requests/backend/bergamot';
 import { clearCacheFactory } from '../../requests/backend/clearCache';
 import { getConfigFactory } from '../../requests/backend/getConfig';
@@ -51,13 +44,6 @@ export const requestHandlers = [
 	setConfigFactory,
 	resetConfigFactory,
 	updateConfigFactory,
-
-	getLanguagePreferencesFactory,
-	addLanguagePreferencesFactory,
-	deleteLanguagePreferencesFactory,
-	setSitePreferencesFactory,
-	getSitePreferencesFactory,
-	deleteSitePreferencesFactory,
 
 	addTranslationFactory,
 	deleteTranslationFactory,

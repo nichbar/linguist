@@ -66,7 +66,6 @@ export const AppConfig = type.type({
 	}),
 	selectTranslator: type.type({
 		enabled: type.boolean,
-		disableWhileTranslatePage: type.boolean,
 		zIndex: type.union([type.number, type.undefined]),
 		focusOnTranslateButton: type.union([type.boolean, type.undefined]),
 		rememberDirection: type.boolean,
@@ -94,15 +93,6 @@ export const AppConfig = type.type({
 			StringLiteralType('contextMenu'),
 		]),
 	}),
-	pageTranslator: type.type({
-		excludeSelectors: ArrayOfStrings,
-		translatableAttributes: ArrayOfStrings,
-		lazyTranslate: type.boolean,
-		detectLanguageByContent: type.boolean,
-		originalTextPopup: type.boolean,
-		enableContextMenu: type.boolean,
-		toggleTranslationHotkey: type.union([type.null, type.string]),
-	}),
 	textTranslator: type.type({
 		rememberText: type.boolean,
 		spellCheck: type.boolean,
@@ -114,11 +104,6 @@ export const AppConfig = type.type({
 	}),
 	history: type.type({
 		enabled: type.boolean,
-	}),
-	popupTab: type.type({
-		pageTranslator: type.type({
-			showCounters: type.boolean,
-		}),
 	}),
 });
 

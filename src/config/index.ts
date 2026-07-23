@@ -1,7 +1,6 @@
 import { isMobileBrowser } from '../lib/browser';
 import { getUserLanguage } from '../lib/language';
 import { AppConfigType } from '../types/runtime';
-import noTranslateSelectors from './no-translate-selectors.txt';
 
 export const DEFAULT_TRANSLATOR = 'MicrosoftTranslator';
 export const DEFAULT_TTS = 'google';
@@ -29,16 +28,6 @@ export const defaultConfig: AppConfigType = {
 	cache: {
 		ignoreCase: true,
 	},
-	pageTranslator: {
-		excludeSelectors: noTranslateSelectors.split('\n'),
-		translatableAttributes: ['title', 'alt', 'placeholder', 'label', 'aria-label'],
-		// Temporary solution to fix UX due to bug https://github.com/translate-tools/linguist/issues/75
-		lazyTranslate: isMobileBrowser() ? false : true,
-		detectLanguageByContent: true,
-		originalTextPopup: false,
-		enableContextMenu: true,
-		toggleTranslationHotkey: null,
-	},
 	textTranslator: {
 		rememberText: true,
 		spellCheck: true,
@@ -47,7 +36,6 @@ export const defaultConfig: AppConfigType = {
 	},
 	selectTranslator: {
 		enabled: true,
-		disableWhileTranslatePage: true,
 		mode: 'popupButton',
 		zIndex: 999999,
 		rememberDirection: false,
@@ -66,10 +54,5 @@ export const defaultConfig: AppConfigType = {
 	},
 	history: {
 		enabled: true,
-	},
-	popupTab: {
-		pageTranslator: {
-			showCounters: true,
-		},
 	},
 };
