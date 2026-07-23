@@ -2,6 +2,7 @@ import browser from 'webextension-polyfill';
 
 import { DEFAULT_TRANSLATOR, DEFAULT_TTS, defaultConfig } from '../../config';
 import { createMigrationTask, Migration } from '../../lib/migrations/createMigrationTask';
+import { DEFAULT_LLM_PROMPT } from '../../lib/translators/llm/LLMTranslator';
 import { decodeStruct } from '../../lib/types';
 import { AppConfig } from '../../types/runtime';
 
@@ -284,6 +285,41 @@ const migrations: Migration[] = [
 				delete selectTranslator.disableWhileTranslatePage;
 				updatedConfig.selectTranslator = selectTranslator;
 			}
+
+			await browser.storage.local.set({ [storageName]: updatedConfig });
+		},
+	},
+	{
+		// Add llmTranslator.prompt
+		version: 14,
+		async migrate() {
+			const storageName = 'appConfig';
+
+			let { [storageName]: actualData } =
+				await browser.storage.local.get(storageName);
+			if (typeof actualData !== 'object' || actualData === null) {
+				actualData = {};
+			}
+
+			const llmTranslator = {
+				apiKey: '',
+				apiUrl: 'https://api.openai.com/v1/chat/completions',
+				model: 'gpt-4o-mini',
+				prompt: DEFAULT_LLM_PROMPT,
+				...(actualData?.llmTranslator ?? {}),
+			};
+
+			if (
+				typeof llmTranslator.prompt !== 'string' ||
+				llmTranslator.prompt.trim() === ''
+			) {
+				llmTranslator.prompt = DEFAULT_LLM_PROMPT;
+			}
+
+			const updatedConfig = {
+				...actualData,
+				llmTranslator,
+			};
 
 			await browser.storage.local.set({ [storageName]: updatedConfig });
 		},

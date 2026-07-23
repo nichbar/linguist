@@ -356,6 +356,12 @@
 	"settings_option_llmTranslator_model_desc": {
 		"message": "Model id passed to the chat completions API"
 	},
+	"settings_option_llmTranslator_prompt": {
+		"message": "System prompt"
+	},
+	"settings_option_llmTranslator_prompt_desc": {
+		"message": "Instructions sent to the model for each translation. Use {from} and {to} as placeholders for source and target language codes. Leave empty to restore the default prompt"
+	},
 	"settings_option_pageTranslation": {
 		"message": "The full page translation"
 	},

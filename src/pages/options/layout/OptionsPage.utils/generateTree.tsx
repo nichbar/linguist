@@ -6,6 +6,7 @@ import {
 	getLocalizedNode,
 	getMessage,
 } from '../../../../lib/language';
+import { DEFAULT_LLM_PROMPT } from '../../../../lib/translators/llm/LLMTranslator';
 import { capitalizeString } from '../../../../lib/utils';
 
 import { OptionsGroup } from '../OptionsTree/OptionsTree';
@@ -142,6 +143,17 @@ export const generateTree = ({
 							optionContent: {
 								type: 'InputText',
 								placeholder: 'gpt-4o-mini',
+							},
+						},
+						{
+							title: getMessage('settings_option_llmTranslator_prompt'),
+							description: getMessage(
+								'settings_option_llmTranslator_prompt_desc',
+							),
+							path: 'llmTranslator.prompt',
+							optionContent: {
+								type: 'InputTextarea',
+								placeholder: DEFAULT_LLM_PROMPT,
 							},
 						},
 					],

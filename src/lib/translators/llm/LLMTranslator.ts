@@ -6,14 +6,21 @@ export type LLMTranslatorOptions = {
 	apiKey?: string;
 	apiUrl?: string;
 	model?: string;
+	/**
+	 * System prompt template. Supports `{from}` and `{to}` placeholders for language codes.
+	 * Empty/undefined falls back to the built-in default prompt.
+	 */
+	prompt?: string;
 };
 
 const DEFAULT_API_URL = 'https://api.openai.com/v1/chat/completions';
 const DEFAULT_MODEL = 'gpt-4o-mini';
+export const DEFAULT_LLM_PROMPT =
+	'You are a precise translator. Translate the given text from language code "{from}" to language code "{to}". Return ONLY the direct translation without quotes, explanations, or introductory text.';
 
 /**
  * Built-in translator that talks to any OpenAI-compatible chat completions endpoint.
- * Configure `apiKey`, `apiUrl` and `model` in extension settings.
+ * Configure `apiKey`, `apiUrl`, `model` and `prompt` in extension settings.
  */
 export class LLMTranslator {
 	static translatorName = getMessage('common_llmTranslator');
@@ -25,11 +32,13 @@ export class LLMTranslator {
 	private readonly apiKey: string;
 	private readonly apiUrl: string;
 	private readonly model: string;
+	private readonly prompt: string;
 
 	constructor(options: LLMTranslatorOptions = {}) {
 		this.apiKey = options.apiKey ?? '';
 		this.apiUrl = options.apiUrl || DEFAULT_API_URL;
 		this.model = options.model || DEFAULT_MODEL;
+		this.prompt = options.prompt?.trim() || DEFAULT_LLM_PROMPT;
 	}
 
 	getLengthLimit = () => 4000;
@@ -38,6 +47,10 @@ export class LLMTranslator {
 		const plainText = Array.isArray(text) ? text.join('') : text;
 		return plainText.length - this.getLengthLimit();
 	};
+
+	private buildSystemPrompt(from: string, to: string) {
+		return this.prompt.replaceAll('{from}', from).replaceAll('{to}', to);
+	}
 
 	async translate(text: string, from: string, to: string) {
 		if (!this.apiKey) {
@@ -57,7 +70,7 @@ export class LLMTranslator {
 				messages: [
 					{
 						role: 'system',
-						content: `You are a precise translator. Translate the given text from language code "${from}" to language code "${to}". Return ONLY the direct translation without quotes, explanations, or introductory text.`,
+						content: this.buildSystemPrompt(from, to),
 					},
 					{
 						role: 'user',

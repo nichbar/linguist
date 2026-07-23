@@ -52,6 +52,10 @@ export const AppConfig = type.type({
 		apiKey: type.string,
 		apiUrl: type.string,
 		model: type.string,
+		/**
+		 * System prompt template. Use `{from}` and `{to}` for language codes.
+		 */
+		prompt: type.string,
 	}),
 	scheduler: type.type({
 		useCache: type.boolean,

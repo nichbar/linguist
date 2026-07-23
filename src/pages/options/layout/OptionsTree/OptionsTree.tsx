@@ -32,6 +32,13 @@ export interface OptionInputText {
 	spellCheck?: boolean;
 }
 
+export interface OptionInputTextarea {
+	type: 'InputTextarea';
+	placeholder?: string;
+	spellCheck?: boolean;
+	rows?: number;
+}
+
 export interface OptionInputMultilineFromArray {
 	type: 'InputMultilineFromArray';
 }
@@ -71,6 +78,7 @@ export interface OptionItem {
 		| OptionSelectList
 		| OptionInputNumber
 		| OptionInputText
+		| OptionInputTextarea
 		| OptionInputMultilineFromArray
 		| OptionCheckbox
 		| OptionCheckboxGroup
@@ -232,6 +240,19 @@ export const OptionsTree: FC<OptionsTreeProps> = ({
 									path,
 									Number.isNaN(parsedNumber) ? rawValue : parsedNumber,
 								);
+							}}
+						/>
+					);
+				case 'InputTextarea':
+					return (
+						<Textarea
+							autoResize
+							state={error !== undefined ? 'error' : undefined}
+							value={value ?? ''}
+							placeholder={option.placeholder}
+							spellCheck={option.spellCheck ?? false}
+							onInputText={(nextValue) => {
+								setOptionValueProxy(path, nextValue);
 							}}
 						/>
 					);

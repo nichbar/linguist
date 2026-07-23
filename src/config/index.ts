@@ -1,5 +1,6 @@
 import { isMobileBrowser } from '../lib/browser';
 import { getUserLanguage } from '../lib/language';
+import { DEFAULT_LLM_PROMPT } from '../lib/translators/llm/LLMTranslator';
 import { AppConfigType } from '../types/runtime';
 
 export const DEFAULT_TRANSLATOR = 'MicrosoftTranslator';
@@ -16,6 +17,7 @@ export const defaultConfig: AppConfigType = {
 		apiKey: '',
 		apiUrl: 'https://api.openai.com/v1/chat/completions',
 		model: 'gpt-4o-mini',
+		prompt: DEFAULT_LLM_PROMPT,
 	},
 	scheduler: {
 		useCache: true,
