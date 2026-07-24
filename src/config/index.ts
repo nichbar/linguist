@@ -49,7 +49,7 @@ export const defaultConfig: AppConfigType = {
 		showOnceForSelection: isMobileBrowser() ? false : true,
 		showOriginalText: true,
 		isUseAutoForDetectLang: true,
-		opacity: 1,
+		opacity: 0.95,
 	},
 	popup: {
 		rememberLastTab: true,

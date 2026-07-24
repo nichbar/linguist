@@ -58,20 +58,17 @@ export const TextTranslatorPopup: FC<TextTranslatorPopupProps> = ({
 	timeoutForHideButton,
 	quickTranslate = false,
 	focusOnTranslateButton = false,
-	opacity = 1,
+	opacity = 0.95,
 	closeHandler,
 	...props
 }) => {
 	const [translating, setTranslating] = useState(quickTranslate);
 
-	const doTranslate = useCallback(() => {
-		if (!translating) {
-			setTranslating(true);
-		}
-	}, [translating]);
-
 	const isUnmount = useRef(false);
 	const autoCloseTimeout = useRef<number | null>(null);
+	// Ref so pointerdown/click can disable auto-hide before React re-renders
+	// with `translating === true`.
+	const isOpeningOrTranslatingRef = useRef(quickTranslate);
 
 	const toggleAutoclose = useCallback(
 		(enable: boolean) => {
@@ -79,6 +76,9 @@ export const TextTranslatorPopup: FC<TextTranslatorPopupProps> = ({
 
 			// Skip if same state
 			if (enable === isEnabled) return;
+
+			// Never re-arm auto-hide once the user has engaged the button / card.
+			if (enable && isOpeningOrTranslatingRef.current) return;
 
 			// Clear timeout
 			if (autoCloseTimeout.current !== null) {
@@ -89,7 +89,7 @@ export const TextTranslatorPopup: FC<TextTranslatorPopupProps> = ({
 			if (enable) {
 				if (timeoutForHideButton !== undefined && timeoutForHideButton > 0) {
 					autoCloseTimeout.current = window.setTimeout(() => {
-						if (!isUnmount.current) {
+						if (!isUnmount.current && !isOpeningOrTranslatingRef.current) {
 							closeHandler();
 						}
 					}, timeoutForHideButton);
@@ -98,6 +98,16 @@ export const TextTranslatorPopup: FC<TextTranslatorPopupProps> = ({
 		},
 		[closeHandler, timeoutForHideButton],
 	);
+
+	const doTranslate = useCallback(() => {
+		if (!translating) {
+			// Stop auto-hide before opening the card so a late timeout can't
+			// race the click and unmount the popup.
+			isOpeningOrTranslatingRef.current = true;
+			toggleAutoclose(false);
+			setTranslating(true);
+		}
+	}, [toggleAutoclose, translating]);
 
 	// Init
 	useEffect(() => {
@@ -126,6 +136,41 @@ export const TextTranslatorPopup: FC<TextTranslatorPopupProps> = ({
 	}, []);
 
 	const cursorRef = useRef<HTMLDivElement>(null);
+	const containerRef = useRef<HTMLDivElement>(null);
+	const translateButtonRef = useRef<HTMLDivElement>(null);
+
+	// LayerManager (via Popup) closes on document click/ESC. Clicks inside a
+	// closed shadow root surface on document listeners with `event.target`
+	// equal to the host, so `popup.contains(event.target)` is false and
+	// LayerManager can treat them as outside. Drop those false positives; real
+	// outside presses still close via SelectTranslator.pointerDown (icon) /
+	// LayerManager (card). Capture phase also runs before React commits
+	// `doTranslate`, so ignore click closes while still in button mode.
+	const handlePopupClose = useCallback(
+		(event: KeyboardEvent | MouseEvent, source: 'esc' | 'click') => {
+			if (source === 'click') {
+				if (!translating) return;
+
+				const inner =
+					containerRef.current ??
+					translateButtonRef.current ??
+					cursorRef.current;
+				if (inner && event.target instanceof Node) {
+					const root = inner.getRootNode();
+					// Closed-shadow click: target is the host on document listeners
+					if (root instanceof ShadowRoot && event.target === root.host) {
+						return;
+					}
+					if (inner === event.target || inner.contains(event.target)) {
+						return;
+					}
+				}
+			}
+			closeHandler();
+		},
+		[closeHandler, translating],
+	);
+
 	const cursorStyle: React.CSSProperties = useMemo(() => {
 		const { left, top, width, height } = fixPosToPreventOverflow(anchor);
 
@@ -156,10 +201,6 @@ export const TextTranslatorPopup: FC<TextTranslatorPopupProps> = ({
 		],
 		[],
 	);
-
-	// Focus on translate button or root node by change `translating` state
-	const containerRef = useRef<HTMLDivElement>(null);
-	const translateButtonRef = useRef<HTMLDivElement>(null);
 
 	const focusTranslateButton = useCallback(() => {
 		if (!translateButtonRef.current) return false;
@@ -237,6 +278,13 @@ export const TextTranslatorPopup: FC<TextTranslatorPopupProps> = ({
 							doTranslate();
 						}
 					}}
+					// pointerdown runs before document-level click handlers and before
+					// selection-clearing side effects; cancel auto-hide immediately
+					// and mark intent so a late mouseleave can't re-arm the timer.
+					onPointerDown={() => {
+						isOpeningOrTranslatingRef.current = true;
+						toggleAutoclose(false);
+					}}
 					onClick={doTranslate}
 					onMouseOver={() => {
 						toggleAutoclose(false);
@@ -287,7 +335,7 @@ export const TextTranslatorPopup: FC<TextTranslatorPopupProps> = ({
 					visible={true}
 					zIndex={zIndex}
 					modifiers={modifiers}
-					onClose={closeHandler}
+					onClose={handlePopupClose}
 					view={translating ? 'default' : undefined}
 					UNSTABLE_updatePosition={updateRef}
 				>

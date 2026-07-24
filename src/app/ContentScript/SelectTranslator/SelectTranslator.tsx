@@ -107,7 +107,7 @@ export class SelectTranslator {
 		showOnceForSelection: true,
 		showOriginalText: true,
 		isUseAutoForDetectLang: true,
-		opacity: 1,
+		opacity: 0.95,
 		enableTranslateFromContextMenu: false,
 	};
 
